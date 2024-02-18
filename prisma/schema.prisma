@@ -1,0 +1,285 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+// Enums
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MOD
+  USER
+}
+
+enum AnimeFormat {
+  MOVIE
+  MUSIC_VIDEO
+  ONA
+  OVA
+  TV
+}
+
+enum AnimeSource {
+  BOOK
+  CARD_GAME
+  DIGITAL_MANGA
+  FOURKOMA
+  GAME
+  LIGHT_NOVEL
+  MANGA
+  MIXED_MEDIA
+  MUSIC
+  NOVEL
+  ORIGINAL
+  OTHER
+  PICTURE_BOOK
+  RADIO
+  UNKNOWN
+  VISUAL_NOVEL
+  WEB_MANGA
+}
+
+enum AnimeStatus {
+  ANNOUNCED
+  AIRING
+  CANCELED
+  FINISHED_AIRING
+  HIATUS
+  UNKNOWN
+}
+
+enum AnimeAgeRating {
+  G
+  PG
+  PG_13
+  R_17
+  R
+  Rx
+}
+
+enum AnimeSeason {
+  FALL
+  SPRING
+  SUMMER
+  WINTER
+}
+
+enum MangaFormat {
+  DOUJINSHI
+  LIGHT_NOVEL
+  MANGA
+  MANHUA
+  MANHWA
+  NOVEL
+  ONE_SHOT
+}
+
+enum MangaStatus {
+  ANNOUNCED
+  CANCELED
+  HIATUS
+  PUBLISHING
+  UNKNOWN
+}
+
+enum ListAnimeStatus {
+  COMPLETED
+  DROPPED
+  ON_HOLD
+  WATCHING
+}
+
+enum ListMangaStatus {
+  COMPLETED
+  DROPPED
+  ON_HOLD
+  READING
+}
+
+// Models
+
+model User {
+  id         String   @id @default(cuid()) @map("_id")
+  email      String   @unique
+  username   String   @unique
+  password   String
+  avatar     String?
+  role       UserRole @default(USER)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  anime_lists     AnimeList[]
+  manga_lists     MangaList[]
+  character_lists CharacterList[]
+  anime_ratings   AnimeRating[]
+  manga_ratings   MangaRating[]
+}
+
+model Anime {
+  id            String          @id @default(cuid()) @map("_id")
+  title         String
+  poster        String?
+  format        AnimeFormat?
+  status        AnimeStatus?
+  episode_count Int?
+  season        AnimeSeason?
+  year          Int?
+  source_type   AnimeSource?
+  age_rating    AnimeAgeRating?
+  synopsis      String?
+  background    String?
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+
+  characters AnimeCharacter[]
+  lists      ListAnime[]
+  ratings    AnimeRating[]
+}
+
+model Manga {
+  id         String       @id @default(cuid()) @map("_id")
+  title      String
+  poster     String?
+  format     MangaFormat?
+  status     MangaStatus?
+  volumes    Int?
+  chapters   Int?
+  synopsis   String?
+  background String?
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+
+  manga   MangaCharacter[]
+  lists   ListManga[]
+  ratings MangaRating[]
+}
+
+model Character {
+  id         String   @id @default(cuid()) @map("_id")
+  name       String
+  image      String?
+  bio        String?
+  gender     String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  anime AnimeCharacter[]
+  manga MangaCharacter[]
+  lists ListCharacter[]
+}
+
+// Explicit many-to-many relations
+
+model AnimeCharacter {
+  id String @id @default(cuid()) @map("_id")
+
+  anime_id String
+  anime    Anime  @relation(fields: [anime_id], references: [id], onDelete: Cascade)
+
+  character_id String
+  character    Character @relation(fields: [character_id], references: [id], onDelete: Cascade)
+}
+
+model MangaCharacter {
+  id String @id @default(cuid()) @map("_id")
+
+  manga_id String
+  manga    Manga  @relation(fields: [manga_id], references: [id], onDelete: Cascade)
+
+  character_id String
+  character    Character @relation(fields: [character_id], references: [id], onDelete: Cascade)
+}
+
+model AnimeList {
+  id         String   @id @default(cuid()) @map("_id")
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  anime ListAnime[]
+}
+
+model ListAnime {
+  id String @id @default(cuid()) @map("_id")
+
+  list_id String
+  list    AnimeList @relation(fields: [list_id], references: [id], onDelete: Cascade)
+
+  anime_id String
+  anime    Anime  @relation(fields: [anime_id], references: [id], onDelete: Cascade)
+}
+
+model MangaList {
+  id         String   @id @default(cuid()) @map("_id")
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  manga ListManga[]
+}
+
+model ListManga {
+  id String @id @default(cuid()) @map("_id")
+
+  list_id String
+  list    MangaList @relation(fields: [list_id], references: [id], onDelete: Cascade)
+
+  manga_id String
+  manga    Manga  @relation(fields: [manga_id], references: [id], onDelete: Cascade)
+}
+
+model CharacterList {
+  id         String   @id @default(cuid()) @map("_id")
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  characters ListCharacter[]
+}
+
+model ListCharacter {
+  id String @id @default(cuid()) @map("_id")
+
+  list_id String
+  list    CharacterList @relation(fields: [list_id], references: [id], onDelete: Cascade)
+
+  character_id String
+  character    Character @relation(fields: [character_id], references: [id], onDelete: Cascade)
+}
+
+model AnimeRating {
+  id    String @id @default(cuid()) @map("_id")
+  score Int
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  anime_id String
+  anime    Anime  @relation(fields: [anime_id], references: [id], onDelete: Cascade)
+}
+
+model MangaRating {
+  id    String @id @default(cuid()) @map("_id")
+  score Int
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  manga_id String
+  manga    Manga  @relation(fields: [manga_id], references: [id], onDelete: Cascade)
+}
