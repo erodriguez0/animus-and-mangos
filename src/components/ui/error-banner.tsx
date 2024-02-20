@@ -4,7 +4,7 @@ interface ErrorBannerProps {
 
 const ErrorBanner = ({ message }: ErrorBannerProps) => {
   return (
-    <div className="flex h-10 w-full items-center rounded-md bg-destructive px-4">
+    <div className="flex min-h-10 w-full flex-wrap items-center break-all rounded-md bg-destructive px-4 py-2">
       <p className="text-sm text-destructive-foreground">{message}</p>
     </div>
   )

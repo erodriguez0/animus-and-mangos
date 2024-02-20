@@ -2,30 +2,25 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useTransition } from "react"
+import { useFormState } from "react-dom"
 import { useForm } from "react-hook-form"
 
 import { Button, buttonVariants } from "@/components/ui/button"
 import ErrorBanner from "@/components/ui/error-banner"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Form } from "@/components/ui/form"
+import FormInput from "@/components/ui/form-input"
 import Logo from "@/components/ui/logo"
 
-import { cn } from "@/lib/utils"
 import { RegisterSchema, RegisterType } from "@/lib/validators/register"
 
-const RegisterForm = () => {
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string>("")
+import { cn } from "@/lib/utils"
 
-  const router = useRouter()
+import { createUser } from "@/actions/create-user"
+
+const RegisterForm = () => {
+  const [state, action] = useFormState(createUser, { message: "" })
+  const [isPending, startTransition] = useTransition()
 
   const form = useForm<RegisterType>({
     resolver: zodResolver(RegisterSchema),
@@ -37,29 +32,9 @@ const RegisterForm = () => {
   })
 
   const onSubmit = async (values: RegisterType) => {
-    try {
-      setLoading(true)
-
-      const res = await fetch("/api/auth/register", {
-        method: "post",
-        body: JSON.stringify(values),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (!res.ok) {
-        const message = await res.json()
-        setError(message)
-        return
-      }
-
-      router.push("/login")
-    } catch (error) {
-      setError("Something went wrong, please try again later")
-    } finally {
-      setLoading(false)
-    }
+    startTransition(async () => {
+      action(values)
+    })
   }
 
   return (
@@ -78,67 +53,37 @@ const RegisterForm = () => {
         </p>
       </div>
 
-      {error && <ErrorBanner message={error} />}
+      {state.message && <ErrorBanner message={state.message} />}
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex w-full flex-col gap-4"
         >
-          <FormField
+          <FormInput
             name="email"
             control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    disabled={loading}
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
+            disabled={isPending}
+            type="text"
           />
 
-          <FormField
+          <FormInput
             name="password"
+            type="password"
             control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    disabled={loading}
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
+            disabled={isPending}
           />
 
-          <FormField
+          <FormInput
             name="confirm"
+            type="password"
             control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    disabled={loading}
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
+            disabled={isPending}
           />
 
           <Button
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="lg:w-fit"
           >
             Create Account

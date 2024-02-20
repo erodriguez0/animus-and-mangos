@@ -21,7 +21,7 @@ interface FormSelectProps<T extends FieldValues> {
   label?: string
   options: object
   placeholder?: string
-  loading?: boolean
+  disabled?: boolean
   className?: string
   showError?: boolean
 }
@@ -32,7 +32,7 @@ const FormSelect = <T extends FieldValues>({
   label,
   options,
   placeholder,
-  loading = false,
+  disabled = false,
   className,
   showError = false,
 }: FormSelectProps<T>) => {
@@ -49,7 +49,7 @@ const FormSelect = <T extends FieldValues>({
           >
             <FormControl>
               <SelectTrigger
-                disabled={loading}
+                disabled={disabled}
                 className={className}
                 {...field}
               >

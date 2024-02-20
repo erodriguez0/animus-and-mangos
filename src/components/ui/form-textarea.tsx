@@ -15,7 +15,7 @@ interface FormTextareaProps<T extends FieldValues> {
   label?: string
   rows?: number
   placeholder?: string
-  loading?: boolean
+  disabled?: boolean
   className?: string
   showError?: boolean
 }
@@ -26,7 +26,7 @@ const FormTextarea = <T extends FieldValues>({
   label,
   rows = 4,
   placeholder,
-  loading = false,
+  disabled = false,
   className,
   showError = false,
 }: FormTextareaProps<T>) => {
@@ -41,7 +41,7 @@ const FormTextarea = <T extends FieldValues>({
             <Textarea
               rows={rows}
               placeholder={placeholder}
-              disabled={loading}
+              disabled={disabled}
               className={className}
               {...field}
             />

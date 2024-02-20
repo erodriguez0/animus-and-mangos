@@ -1,53 +1,53 @@
 "use server"
 
-import { User } from "@prisma/client"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { nanoid } from "nanoid"
-import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { ZodError } from "zod"
 
 import { RegisterSchema, RegisterType } from "@/lib/validators/register"
 
 import { prismadb } from "@/lib/db"
 
-const createUser = async (data: RegisterType) => {
-  let user: User | null
+import { State } from "@/types/custom"
 
+const createUser = async (state: State, data: RegisterType) => {
   try {
-    const parsed = await RegisterSchema.safeParseAsync(data)
-
-    if (!parsed.success) {
-      return
-      //   return new Response("Invalid registration data", { status: 400 })
-    }
-
-    const { email, password } = parsed.data
+    const { email, password } = await RegisterSchema.parseAsync(data)
 
     const userExists = await prismadb.user.findFirst({
       where: {
-        email: {
-          startsWith: email,
-          mode: "insensitive",
-        },
+        email,
       },
     })
 
     if (userExists) {
-      return
-      //   return new Response("Email already in use", { status: 409 })
+      return {
+        message: "Email already in use",
+      }
     }
 
     const hash = await bcrypt.hash(password, 10)
-    user = await prismadb.user.create({
+    await prismadb.user.create({
       data: {
         email,
         username: "user" + nanoid(10),
         password: hash,
       },
     })
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return {
+        message: error.errors[0].message,
+      }
+    }
 
-  revalidatePath("/")
-  return
+    return {
+      message: "Something went wrong",
+    }
+  }
+
+  redirect("/login")
 }
 
 export { createUser }

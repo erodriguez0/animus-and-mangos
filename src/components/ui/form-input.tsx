@@ -16,7 +16,7 @@ interface FormInputProps<T extends FieldValues> {
   label?: string
   type?: HTMLInputTypeAttribute
   placeholder?: string
-  loading?: boolean
+  disabled?: boolean
   className?: string
   showError?: boolean
 }
@@ -27,7 +27,7 @@ const FormInput = <T extends FieldValues>({
   label,
   type = "text",
   placeholder,
-  loading = false,
+  disabled = false,
   className,
   showError = false,
 }: FormInputProps<T>) => {
@@ -41,7 +41,7 @@ const FormInput = <T extends FieldValues>({
           <FormControl>
             <Input
               type={type}
-              disabled={loading}
+              disabled={disabled}
               placeholder={placeholder}
               className={className}
               {...field}

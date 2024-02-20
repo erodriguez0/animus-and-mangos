@@ -3,8 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useTransition } from "react"
+import { useFormState } from "react-dom"
 import { useForm } from "react-hook-form"
 
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -13,14 +13,15 @@ import { Form } from "@/components/ui/form"
 import FormInput from "@/components/ui/form-input"
 import Logo from "@/components/ui/logo"
 
-import { cn } from "@/lib/utils"
 import { LoginSchema, LoginType } from "@/lib/validators/login"
 
-const LoginForm = () => {
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string>("")
+import { cn } from "@/lib/utils"
 
-  const router = useRouter()
+import { loginUser } from "@/actions/login-user"
+
+const LoginForm = () => {
+  const [state, action] = useFormState(loginUser, { message: "" })
+  const [isPending, startTransition] = useTransition()
 
   const form = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
@@ -31,22 +32,9 @@ const LoginForm = () => {
   })
 
   const onSubmit = async (values: LoginType) => {
-    try {
-      setLoading(true)
-
-      await signIn("credentials", {
-        redirect: false,
-        identifier: values.identifier,
-        password: values.password,
-      })
-
-      router.push("/")
-      router.refresh()
-    } catch (error) {
-      setError("Something went wrong, please try again later")
-    } finally {
-      setLoading(false)
-    }
+    startTransition(async () => {
+      action(values)
+    })
   }
 
   return (
@@ -65,7 +53,7 @@ const LoginForm = () => {
         </p>
       </div>
 
-      {error && <ErrorBanner message={error} />}
+      {state?.message && <ErrorBanner message={state.message} />}
 
       <Form {...form}>
         <form
@@ -76,7 +64,7 @@ const LoginForm = () => {
             name="identifier"
             control={form.control}
             label="Email or Username"
-            loading={loading}
+            disabled={isPending}
           />
 
           <FormInput
@@ -84,12 +72,12 @@ const LoginForm = () => {
             control={form.control}
             label="Password"
             type="password"
-            loading={loading}
+            disabled={isPending}
           />
 
           <Button
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="lg:w-fit"
           >
             Sign In

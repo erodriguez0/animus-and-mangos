@@ -14,3 +14,7 @@ export type Routes = {
     | undefined
   admin?: boolean
 }[]
+
+export type State = {
+  message: string
+}

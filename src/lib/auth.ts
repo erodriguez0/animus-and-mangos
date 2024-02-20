@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import bcrypt from "bcryptjs"
 import { NextAuthOptions, getServerSession } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
@@ -23,24 +24,39 @@ export const authOptions: NextAuthOptions = {
       },
       authorize: async (credentials, req) => {
         try {
-          const res = await fetch(
-            `${process.env.NEXTAUTH_URL}/api/auth/login`,
-            {
-              method: "post",
-              body: JSON.stringify(credentials),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            },
-          )
-
-          if (!res.ok) {
+          if (!credentials?.identifier || !credentials.password) {
             return null
           }
 
-          const user = await res.json()
+          const user = await prismadb.user.findFirst({
+            where: {
+              OR: [
+                {
+                  email: {
+                    equals: credentials.identifier,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  username: {
+                    equals: credentials.identifier,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+          })
 
           if (!user) {
+            return null
+          }
+
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password,
+            user.password,
+          )
+
+          if (!isPasswordCorrect) {
             return null
           }
 

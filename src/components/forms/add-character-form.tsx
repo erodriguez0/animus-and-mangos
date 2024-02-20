@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Anime, Character, Manga } from "@prisma/client"
 import { TrashIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useTransition } from "react"
+import { useFormState } from "react-dom"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
@@ -31,6 +32,8 @@ const AddCharacterForm = () => {
   const [error, setError] = useState<string>("")
   const [animePreview, setAnimePreview] = useState<Anime[]>([])
   const [mangaPreview, setMangaPreview] = useState<Manga[]>([])
+  // const [state, action] = useFormState(createCharacter, { message: "" })
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
   const form = useForm<CharacterType>({
@@ -46,29 +49,9 @@ const AddCharacterForm = () => {
   })
 
   const onSubmit = async (values: CharacterType) => {
-    try {
-      setLoading(true)
-
-      const res = await fetch("/api/character", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (!res.ok) {
-        const message = await res.json()
-        return setError(message)
-      }
-
-      router.push("/dashboard/character")
-      router.refresh()
-    } catch (error) {
-      setError("Something went wrong")
-    } finally {
-      setLoading(false)
-    }
+    startTransition(async () => {
+      // await createCharacter(state, values)
+    })
   }
 
   const append = (
