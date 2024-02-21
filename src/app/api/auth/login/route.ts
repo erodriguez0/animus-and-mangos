@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt"
 
-import { prismadb } from "@/lib/db"
 import { LoginSchema } from "@/lib/validators/login"
+
+import { prismadb } from "@/lib/db"
 
 export async function POST(req: Request) {
   try {

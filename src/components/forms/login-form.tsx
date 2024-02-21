@@ -3,8 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
-import { useState, useTransition } from "react"
-import { useFormState } from "react-dom"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -17,11 +17,9 @@ import { LoginSchema, LoginType } from "@/lib/validators/login"
 
 import { cn } from "@/lib/utils"
 
-import { loginUser } from "@/actions/login-user"
-
 const LoginForm = () => {
-  const [state, action] = useFormState(loginUser, { message: "" })
-  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string>("")
+  const router = useRouter()
 
   const form = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
@@ -32,13 +30,27 @@ const LoginForm = () => {
   })
 
   const onSubmit = async (values: LoginType) => {
-    startTransition(async () => {
-      action(values)
-    })
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        identifier: values.identifier,
+        password: values.password,
+      })
+
+      if (res && !res.ok) {
+        setError("Invalid credentials")
+        return
+      }
+
+      router.replace("/")
+      router.refresh()
+    } catch (error) {
+      setError("Something went wrong, try again later")
+    }
   }
 
   return (
-    <div className="flex w-full max-w-[400px] flex-col gap-4 border bg-background p-8">
+    <div className="flex w-full max-w-[400px] flex-col gap-4 rounded-md border bg-background p-8">
       <Link
         href="/"
         className="w-fit"
@@ -53,7 +65,7 @@ const LoginForm = () => {
         </p>
       </div>
 
-      {state?.message && <ErrorBanner message={state.message} />}
+      {error && <ErrorBanner message={error} />}
 
       <Form {...form}>
         <form
@@ -64,7 +76,7 @@ const LoginForm = () => {
             name="identifier"
             control={form.control}
             label="Email or Username"
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
           />
 
           <FormInput
@@ -72,12 +84,12 @@ const LoginForm = () => {
             control={form.control}
             label="Password"
             type="password"
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
           />
 
           <Button
             type="submit"
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
             className="lg:w-fit"
           >
             Sign In

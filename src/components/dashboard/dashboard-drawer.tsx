@@ -10,13 +10,14 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import Logo from "@/components/ui/logo"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
+import DashboardMenu from "@/components/dashboard/dashboard-menu"
+
 import LogoutButton from "@/components/logout-button"
-import SiteMenu from "@/components/site/site-menu"
 import ThemeToggle from "@/components/theme-toggle"
 
 import { cn } from "@/lib/utils"
 
-const SiteDrawer = () => {
+const DashboardDrawer = () => {
   const { data: session } = useSession()
   const [open, setOpen] = useState<boolean>()
 
@@ -58,7 +59,7 @@ const SiteDrawer = () => {
           type="always"
           className="flex flex-1 flex-col gap-4 px-4"
         >
-          <SiteMenu />
+          <DashboardMenu />
         </ScrollArea>
         <div className="flex gap-2 p-4">
           {session?.user ? (
@@ -81,4 +82,4 @@ const SiteDrawer = () => {
   )
 }
 
-export default SiteDrawer
+export default DashboardDrawer

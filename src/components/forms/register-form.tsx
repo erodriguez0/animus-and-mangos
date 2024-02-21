@@ -2,7 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useTransition } from "react"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 import { useFormState } from "react-dom"
 import { useForm } from "react-hook-form"
 
@@ -16,11 +17,9 @@ import { RegisterSchema, RegisterType } from "@/lib/validators/register"
 
 import { cn } from "@/lib/utils"
 
-import { createUser } from "@/actions/create-user"
-
 const RegisterForm = () => {
-  const [state, action] = useFormState(createUser, { message: "" })
-  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string>("")
+  const router = useRouter()
 
   const form = useForm<RegisterType>({
     resolver: zodResolver(RegisterSchema),
@@ -32,13 +31,29 @@ const RegisterForm = () => {
   })
 
   const onSubmit = async (values: RegisterType) => {
-    startTransition(async () => {
-      action(values)
-    })
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!res.ok) {
+        const message = await res.json()
+        setError(message)
+      }
+
+      router.replace("/")
+      router.refresh()
+    } catch (error) {
+      setError("Something went wrong, try again later")
+    }
   }
 
   return (
-    <div className="flex w-full max-w-[400px] flex-col gap-4 border bg-background p-8">
+    <div className="flex w-full max-w-[400px] flex-col gap-4 rounded-md border bg-background p-8">
       <Link
         href="/"
         className="w-fit"
@@ -53,7 +68,7 @@ const RegisterForm = () => {
         </p>
       </div>
 
-      {state.message && <ErrorBanner message={state.message} />}
+      {error && <ErrorBanner message={error} />}
 
       <Form {...form}>
         <form
@@ -63,7 +78,7 @@ const RegisterForm = () => {
           <FormInput
             name="email"
             control={form.control}
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
             type="text"
           />
 
@@ -71,19 +86,19 @@ const RegisterForm = () => {
             name="password"
             type="password"
             control={form.control}
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
           />
 
           <FormInput
             name="confirm"
             type="password"
             control={form.control}
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
           />
 
           <Button
             type="submit"
-            disabled={isPending}
+            disabled={form.formState.isSubmitting}
             className="lg:w-fit"
           >
             Create Account

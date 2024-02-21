@@ -6,10 +6,10 @@ import { buttonVariants } from "@/components/ui/button"
 import Header from "@/components/ui/header"
 import Logo from "@/components/ui/logo"
 
+import LogoutButton from "@/components/logout-button"
 import SiteDrawer from "@/components/site/site-drawer"
 import ThemeToggle from "@/components/theme-toggle"
 
-// import UserBadgeServer from "@/components/user-badge-server"
 import { getAuthSession } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
@@ -80,7 +80,7 @@ const SiteHeader = async () => {
 
               <ThemeToggle />
 
-              {/* <UserBadgeServer header /> */}
+              <LogoutButton />
             </>
           )}
         </div>
