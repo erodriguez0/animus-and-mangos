@@ -121,7 +121,7 @@ const AddCharacterForm = () => {
             name="name"
             control={form.control}
             label="Name"
-            loading={loading}
+            disabled={isPending}
             showError
           />
 
@@ -201,7 +201,7 @@ const AddCharacterForm = () => {
             name="bio"
             control={form.control}
             label="Bio"
-            loading={loading}
+            disabled={isPending}
             rows={8}
           />
 

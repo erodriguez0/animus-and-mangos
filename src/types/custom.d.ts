@@ -1,3 +1,4 @@
+import { Anime, AnimeCharacter, Character } from "@prisma/client"
 import { LucideIcon } from "lucide-react"
 
 export type Routes = {
@@ -17,4 +18,11 @@ export type Routes = {
 
 export type State = {
   message: string
+}
+
+export type ExtendedAnime = Anime & {
+  characters: AnimeCharacter &
+    {
+      character: Character
+    }[]
 }
