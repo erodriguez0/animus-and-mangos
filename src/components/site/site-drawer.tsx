@@ -69,7 +69,12 @@ const SiteDrawer = () => {
               <UserIcon className="h-4 w-4" />
             </Link>
           ) : (
-            <Link href="/login"></Link>
+            <Link
+              href="/login"
+              className={cn(buttonVariants(), "flex-1")}
+            >
+              Login
+            </Link>
           )}
 
           <ThemeToggle />

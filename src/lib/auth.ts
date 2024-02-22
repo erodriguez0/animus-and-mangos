@@ -85,7 +85,6 @@ export const authOptions: NextAuthOptions = {
         where: {
           email: {
             equals: token.email,
-            mode: "insensitive",
           },
         },
       })
