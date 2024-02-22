@@ -58,7 +58,7 @@ const SiteDrawer = () => {
           type="always"
           className="flex flex-1 flex-col gap-4 px-4"
         >
-          <SiteMenu />
+          <SiteMenu onClick={() => setOpen(false)} />
         </ScrollArea>
         <div className="flex gap-2 p-4">
           {session?.user ? (

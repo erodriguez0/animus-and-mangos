@@ -14,7 +14,7 @@ interface ImageUploadProps {
   onRemove: (value: string) => void
   value: string[]
   className?: string
-  aspectRatio: "square" | "anime" | "manga"
+  aspectRatio?: "square" | "anime" | "manga"
   variant?:
     | "secondary"
     | "default"
@@ -51,7 +51,7 @@ const ImageUpload = ({
           <div
             className={cn(
               "relative aspect-[225/325] h-auto w-48 overflow-hidden rounded-md",
-              imageAspectRatio[aspectRatio],
+              aspectRatio && imageAspectRatio[aspectRatio],
             )}
           >
             <div className="absolute right-2 top-2 z-10">
