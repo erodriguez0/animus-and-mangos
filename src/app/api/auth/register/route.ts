@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt"
 import { nanoid } from "nanoid"
 
-import { prismadb } from "@/lib/db"
 import { RegisterSchema } from "@/lib/validators/register"
+
+import { prismadb } from "@/lib/db"
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +12,10 @@ export async function POST(req: Request) {
     const parsed = await RegisterSchema.safeParseAsync(body)
 
     if (!parsed.success) {
-      return new Response("Invalid registration data", { status: 400 })
+      return Response.json(
+        { message: "Invalid registration data" },
+        { status: 400 },
+      )
     }
 
     const { email, password } = parsed.data
@@ -26,7 +30,7 @@ export async function POST(req: Request) {
     })
 
     if (userExists) {
-      return new Response("Email already in use", { status: 409 })
+      return Response.json({ message: "Email already in use" }, { status: 409 })
     }
 
     const hash = await bcrypt.hash(password, 10)
@@ -38,10 +42,10 @@ export async function POST(req: Request) {
       },
     })
 
-    return Response.json(user, { status: 200 })
+    return Response.json(user, { status: 201 })
   } catch (error) {
     console.log("[AUTH_REGISTER]", error)
 
-    return new Response("Internal server error", { status: 500 })
+    return Response.json({ message: "Internal server error" }, { status: 500 })
   }
 }

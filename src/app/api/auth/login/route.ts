@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const parsed = await LoginSchema.safeParseAsync(body)
 
     if (!parsed.success) {
-      return new Response("Invalid login data", { status: 400 })
+      return Response.json({ message: "Invalid login data" }, { status: 400 })
     }
 
     const { identifier, password } = parsed.data
@@ -35,19 +35,19 @@ export async function POST(req: Request) {
     })
 
     if (!user) {
-      return new Response("Invalid credentials", { status: 401 })
+      return Response.json({ message: "Invalid credentials" }, { status: 401 })
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
 
     if (!isPasswordCorrect) {
-      return new Response("Invalid credentials", { status: 401 })
+      return Response.json({ message: "Invalid credentials" }, { status: 401 })
     }
 
     return Response.json(user, { status: 200 })
   } catch (error) {
     console.log("[AUTH_LOGIN]", error)
 
-    return new Response("Internal server error", { status: 500 })
+    return Response.json({ message: "Internal server error" }, { status: 500 })
   }
 }

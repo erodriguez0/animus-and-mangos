@@ -17,6 +17,8 @@ import { RegisterSchema, RegisterType } from "@/lib/validators/register"
 
 import { cn } from "@/lib/utils"
 
+import { ErrorResponse } from "@/types/custom"
+
 const RegisterForm = () => {
   const [error, setError] = useState<string>("")
   const router = useRouter()
@@ -41,8 +43,9 @@ const RegisterForm = () => {
       })
 
       if (!res.ok) {
-        const message = await res.json()
-        setError(message)
+        const data: ErrorResponse = await res.json()
+        setError(data.message)
+        return
       }
 
       router.replace("/")

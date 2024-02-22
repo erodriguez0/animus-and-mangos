@@ -24,3 +24,7 @@ export type ExtendedAnime = Anime & {
       character: Character
     }[]
 }
+
+export type ErrorResponse = {
+  message: string
+}

@@ -11,6 +11,7 @@ import {
   Character,
   Manga,
 } from "@prisma/client"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -25,7 +26,7 @@ import FormTextarea from "@/components/ui/form-textarea"
 
 import { AnimeSchema, AnimeType } from "@/lib/validators/anime"
 
-import { ExtendedAnime, SearchMode } from "@/types/custom"
+import { ErrorResponse, ExtendedAnime, SearchMode } from "@/types/custom"
 
 interface AnimeFormProps {
   anime?: ExtendedAnime
@@ -38,6 +39,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
       ? anime?.characters.map(item => item.character)
       : [],
   )
+  const router = useRouter()
 
   useEffect(() => {
     if (error.length > 0) {
@@ -87,12 +89,14 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
       }
 
       if (!res.ok) {
-        const message: string = await res.json()
-        setError(message)
+        const data: ErrorResponse = await res.json()
+        setError(data.message)
         return
       }
 
-      // Redirect
+      const data: Anime = await res.json()
+
+      router.push(`/anime/${data.id}`)
     } catch (error) {
       setError("Something went wrong, try again later")
     }
