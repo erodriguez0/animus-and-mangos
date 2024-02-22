@@ -31,6 +31,7 @@ export const AnimeSchema = z.object({
   age_rating: z.union([z.literal(""), z.nativeEnum(AnimeAgeRating)]),
   synopsis: z.string(),
   background: z.string(),
+  characters: z.string().cuid().array(),
 })
 
 export type AnimeType = z.infer<typeof AnimeSchema>

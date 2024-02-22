@@ -16,9 +16,7 @@ export type Routes = {
   admin?: boolean
 }[]
 
-export type State = {
-  message: string
-}
+export type SearchMode = "anime" | "manga" | "character"
 
 export type ExtendedAnime = Anime & {
   characters: AnimeCharacter &

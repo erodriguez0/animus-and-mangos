@@ -17,15 +17,15 @@ import { Input } from "@/components/ui/input"
 
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
+import { SearchMode } from "@/types/custom"
+
 interface SearchProps {
-  onClick?: (
-    item: Anime | Manga | Character,
-    mode: "anime" | "manga" | "character",
-  ) => void
-  mode: "anime" | "manga" | "character" | "all"
+  onClick?: (item: Anime | Manga | Character, mode: SearchMode) => void
+  mode: SearchMode | "all"
+  disabled?: boolean
 }
 
-const Search = ({ onClick, mode }: SearchProps) => {
+const Search = ({ onClick, mode, disabled }: SearchProps) => {
   const [input, setInput] = useState<string>("")
   const pathname = usePathname()
   const commandRef = useRef<HTMLDivElement>(null)
@@ -90,7 +90,7 @@ const Search = ({ onClick, mode }: SearchProps) => {
   return (
     <Command
       ref={commandRef}
-      className="relative z-50 w-full overflow-visible rounded-md border"
+      className="relative z-50 h-fit w-full overflow-visible rounded-md border"
     >
       <Input
         // disabled={isFetching}
@@ -100,6 +100,7 @@ const Search = ({ onClick, mode }: SearchProps) => {
         }}
         value={input}
         placeholder={`Search ${mode}...`}
+        disabled={disabled}
         className="border-1"
       />
 

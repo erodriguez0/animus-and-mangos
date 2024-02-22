@@ -27,6 +27,8 @@ import Search from "@/components/ui/search"
 
 import { CharacterSchema, CharacterType } from "@/lib/validators/character"
 
+import { SearchMode } from "@/types/custom"
+
 const AddCharacterForm = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>("")
@@ -54,10 +56,7 @@ const AddCharacterForm = () => {
     })
   }
 
-  const append = (
-    item: Anime | Manga | Character,
-    mode: "anime" | "manga" | "character",
-  ) => {
+  const append = (item: Anime | Manga | Character, mode: SearchMode) => {
     if (mode === "character") return
 
     if (!form.getValues(mode).includes(item.id)) {
@@ -73,7 +72,7 @@ const AddCharacterForm = () => {
     }
   }
 
-  const remove = (id: string, mode: "anime" | "manga" | "character") => {
+  const remove = (id: string, mode: SearchMode) => {
     if (mode === "character") return
 
     if (mode === "anime") {

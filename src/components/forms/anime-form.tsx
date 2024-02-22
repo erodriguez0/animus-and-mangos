@@ -2,11 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
+  Anime,
   AnimeAgeRating,
   AnimeFormat,
   AnimeSeason,
   AnimeSource,
   AnimeStatus,
+  Character,
+  Manga,
 } from "@prisma/client"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -21,7 +24,10 @@ import FormTextarea from "@/components/ui/form-textarea"
 
 import { AnimeSchema, AnimeType } from "@/lib/validators/anime"
 
-import { ExtendedAnime } from "@/types/custom"
+import { ExtendedAnime, SearchMode } from "@/types/custom"
+
+import FormSearch from "../ui/form-search"
+import Search from "../ui/search"
 
 interface AnimeFormProps {
   anime?: ExtendedAnime
@@ -29,6 +35,11 @@ interface AnimeFormProps {
 
 const AnimeForm = ({ anime }: AnimeFormProps) => {
   const [error, setError] = useState<string>("")
+  const [characterPreview, setCharacterPreview] = useState<Character[]>(
+    anime?.characters?.length
+      ? anime?.characters.map(item => item.character)
+      : [],
+  )
 
   useEffect(() => {
     if (error.length > 0) {
@@ -50,6 +61,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
       age_rating: anime?.age_rating || "",
       synopsis: anime?.synopsis || "",
       background: anime?.background || "",
+      characters: anime?.characters?.map(item => item.character.id) || [],
     },
   })
 
@@ -85,6 +97,25 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
       // Redirect
     } catch (error) {
       setError("Something went wrong, try again later")
+    }
+  }
+
+  const append = (item: Anime | Manga | Character, mode: SearchMode) => {
+    if (mode === "character") {
+      if (!form.getValues("characters").includes(item.id)) {
+        form.setValue("characters", [...form.getValues("characters"), item.id])
+        setCharacterPreview([...characterPreview, item as Character])
+      }
+    }
+  }
+
+  const remove = (id: string, mode: SearchMode) => {
+    if (mode === "character") {
+      setCharacterPreview(prev => prev.filter(item => item.id !== id))
+
+      form.setValue("characters", [
+        ...form.getValues("characters").filter(item => item !== id),
+      ])
     }
   }
 
@@ -204,6 +235,15 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
           rows={8}
           disabled={form.formState.isSubmitting}
           showError
+        />
+
+        <FormSearch
+          name="characters"
+          control={form.control}
+          label="Characters"
+          mode="character"
+          append={append}
+          disabled={form.formState.isSubmitting}
         />
 
         <Button
