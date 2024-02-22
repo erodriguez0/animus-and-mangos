@@ -22,6 +22,7 @@ export const MangaSchema = z.object({
   ]),
   synopsis: z.string(),
   background: z.string(),
+  characters: z.string().cuid().array(),
 })
 
 export type MangaType = z.infer<typeof MangaSchema>
