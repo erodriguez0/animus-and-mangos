@@ -19,15 +19,13 @@ import ErrorBanner from "@/components/ui/error-banner"
 import { Form } from "@/components/ui/form"
 import FormImageUpload from "@/components/ui/form-image-upload"
 import FormInput from "@/components/ui/form-input"
+import FormSearch from "@/components/ui/form-search"
 import FormSelect from "@/components/ui/form-select"
 import FormTextarea from "@/components/ui/form-textarea"
 
 import { AnimeSchema, AnimeType } from "@/lib/validators/anime"
 
 import { ExtendedAnime, SearchMode } from "@/types/custom"
-
-import FormSearch from "../ui/form-search"
-import Search from "../ui/search"
 
 interface AnimeFormProps {
   anime?: ExtendedAnime
