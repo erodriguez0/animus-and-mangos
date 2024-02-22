@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
-import { SearchMode } from "@/types/custom"
+import { SearchMode, SearchResults } from "@/types/custom"
 
 interface SearchProps {
   onClick?: (item: Anime | Manga | Character, mode: SearchMode) => void
@@ -64,11 +64,7 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
         return { anime: [], manga: [], characters: [] }
       }
 
-      return (await res.json()) as {
-        anime: Anime[]
-        manga: Manga[]
-        characters: Character[]
-      }
+      return (await res.json()) as SearchResults
     },
     queryKey: ["search-query"],
     enabled: false,

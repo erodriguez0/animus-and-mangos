@@ -11,6 +11,7 @@ import {
   Character,
   Manga,
 } from "@prisma/client"
+import { Trash2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -23,6 +24,7 @@ import FormInput from "@/components/ui/form-input"
 import FormSearch from "@/components/ui/form-search"
 import FormSelect from "@/components/ui/form-select"
 import FormTextarea from "@/components/ui/form-textarea"
+import Poster from "@/components/ui/poster"
 
 import { AnimeSchema, AnimeType } from "@/lib/validators/anime"
 
@@ -42,7 +44,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (error.length > 0) {
+    if (error.length) {
       window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }, [error])
@@ -247,6 +249,34 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
           append={append}
           disabled={form.formState.isSubmitting}
         />
+
+        {characterPreview.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {characterPreview.map(character => (
+              <div
+                key={character.id}
+                className="flex gap-2"
+              >
+                <div className="w-16">
+                  <Poster src={character.image} />
+                </div>
+
+                <div className="flex flex-1">
+                  <p>{character.name}</p>
+                </div>
+
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => remove(character.id, "character")}
+                  className="h-full"
+                >
+                  <Trash2Icon className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
 
         <Button
           type="submit"

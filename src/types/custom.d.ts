@@ -1,4 +1,10 @@
-import { Anime, AnimeCharacter, Character } from "@prisma/client"
+import {
+  Anime,
+  AnimeCharacter,
+  Character,
+  Manga,
+  MangaCharacter,
+} from "@prisma/client"
 import { LucideIcon } from "lucide-react"
 
 export type Routes = {
@@ -16,13 +22,30 @@ export type Routes = {
   admin?: boolean
 }[]
 
-export type SearchMode = "anime" | "manga" | "character"
+export type SearchMode = "anime" | "manga" | "character" | "all"
 
 export type ExtendedAnime = Anime & {
   characters: AnimeCharacter &
     {
       character: Character
     }[]
+}
+
+export type ExtendedCharacter = Character & {
+  anime: AnimeCharacter &
+    {
+      anime: Anime
+    }[]
+  manga: MangaCharacter &
+    {
+      manga: Manga
+    }[]
+}
+
+export type SearchResults = {
+  anime: Anime[]
+  manga: Manga[]
+  characters: Character[]
 }
 
 export type ErrorResponse = {
