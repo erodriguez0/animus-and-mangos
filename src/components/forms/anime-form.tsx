@@ -257,8 +257,11 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
                 key={character.id}
                 className="flex gap-2"
               >
-                <div className="w-16">
-                  <Poster src={character.image} />
+                <div className="w-10">
+                  <Poster
+                    src={character.image}
+                    aspect="square"
+                  />
                 </div>
 
                 <div className="flex flex-1">

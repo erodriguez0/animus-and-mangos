@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Anime, Character, Manga } from "@prisma/client"
+import { Trash2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -13,6 +14,7 @@ import FormImageUpload from "@/components/ui/form-image-upload"
 import FormInput from "@/components/ui/form-input"
 import FormSearch from "@/components/ui/form-search"
 import FormTextarea from "@/components/ui/form-textarea"
+import Poster from "@/components/ui/poster"
 
 import { CharacterSchema, CharacterType } from "@/lib/validators/character"
 
@@ -41,12 +43,16 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
   const form = useForm<CharacterType>({
     resolver: zodResolver(CharacterSchema),
     defaultValues: {
-      name: character?.bio || "",
+      name: character?.name || "",
       image: character?.image || "",
       gender: character?.gender || "",
       bio: character?.bio || "",
-      anime: character?.anime?.map(item => item.anime.id) || [],
-      manga: character?.manga?.map(item => item.manga.id) || [],
+      anime: character?.anime.length
+        ? character?.anime?.map(item => item.anime.id)
+        : [],
+      manga: character?.manga.length
+        ? character?.manga?.map(item => item.manga.id)
+        : [],
     },
   })
 
@@ -92,12 +98,12 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
 
     if (!form.getValues(mode).includes(item.id)) {
       form.setValue(mode, [...form.getValues(mode), item.id])
-    }
 
-    if (mode === "anime") {
-      setAnimePreview([...animePreview, item as Anime])
-    } else {
-      setMangaPreview([...mangaPreview, item as Manga])
+      if (mode === "anime") {
+        setAnimePreview([...animePreview, item as Anime])
+      } else {
+        setMangaPreview([...mangaPreview, item as Manga])
+      }
     }
   }
 
@@ -156,6 +162,34 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
           append={append}
           disabled={form.formState.isSubmitting}
         />
+
+        {animePreview.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {animePreview.map(anime => (
+              <div
+                key={anime.id}
+                className="flex gap-2"
+              >
+                <div className="w-10">
+                  <Poster src={anime.poster} />
+                </div>
+
+                <div className="flex flex-1">
+                  <p>{anime.title}</p>
+                </div>
+
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => remove(anime.id, "anime")}
+                  className="h-full"
+                >
+                  <Trash2Icon className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
 
         <FormSearch
           name="manga"
