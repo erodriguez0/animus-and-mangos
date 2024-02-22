@@ -105,7 +105,7 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
       />
 
       {input.length > 0 && (
-        <CommandList className="absolute inset-x-0 top-full rounded-b-md border-x border-b bg-background">
+        <CommandList className="absolute -inset-x-[0.5px] top-full mt-1 rounded-b-md border-x border-b bg-background">
           {isFetched && <CommandEmpty>No results found.</CommandEmpty>}
 
           {(results?.anime.length ?? 0) > 0 ? (
