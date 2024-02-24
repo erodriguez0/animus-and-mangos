@@ -31,6 +31,13 @@ export type ExtendedAnime = Anime & {
     }[]
 }
 
+export type ExtendedManga = Manga & {
+  characters: AnimeCharacter &
+    {
+      character: Character
+    }[]
+}
+
 export type ExtendedCharacter = Character & {
   anime: AnimeCharacter &
     {
