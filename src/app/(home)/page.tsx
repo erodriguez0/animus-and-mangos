@@ -1,32 +1,81 @@
 import BannerCarousel from "@/components/ui/banner-carousel"
+import Poster from "@/components/ui/poster"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
-// import HorizontalList from "@/components/ui/horizontal-list"
+import { prismadb } from "@/lib/db"
 
-const HomePage = () => {
+const HomePage = async () => {
+  const latestAnime = await prismadb.anime.findMany({
+    take: 20,
+    orderBy: {
+      created_at: "desc",
+    },
+  })
+
+  const latestManga = await prismadb.manga.findMany({
+    take: 20,
+    orderBy: {
+      created_at: "desc",
+    },
+  })
+
+  const loop = () => {}
+
   return (
     <>
       <BannerCarousel />
 
-      {/* <div className="px-2 lg:px-0">
-        <HorizontalList
-          title="Winter 2024"
-          href="https://localhost:3000/anime/?y=2024&s=winter"
-        />
-      </div>
+      <ScrollArea
+        type="always"
+        orientation="horizontal"
+        className="w-full grow-0 pb-4"
+      >
+        <div className="flex h-24 gap-2">
+          {latestAnime.map(anime => (
+            <Poster
+              key={anime.id}
+              src={anime.poster}
+              iconSize={4}
+              className="h-full w-auto"
+            />
+          ))}
 
-      <div className="px-2 lg:px-0">
-        <HorizontalList
-          title="Spring 2024"
-          href="https://localhost:3000/anime/?y=2024&s=winter"
-        />
-      </div>
+          {[...Array(30)].map((v, i) => (
+            <Poster
+              key={i}
+              src={latestAnime[0].poster}
+              iconSize={4}
+              className="h-full w-auto"
+            />
+          ))}
+        </div>
+      </ScrollArea>
 
-      <div className="px-2 lg:px-0">
-        <HorizontalList
-          title="Summer 2024"
-          href="https://localhost:3000/anime/?y=2024&s=winter"
-        />
-      </div> */}
+      <ScrollArea
+        type="always"
+        orientation="horizontal"
+        className="w-full grow-0 pb-4"
+      >
+        <div className="flex h-24 gap-2">
+          {latestManga.map(manga => (
+            <Poster
+              key={manga.id}
+              src={manga.poster}
+              iconSize={4}
+              className="h-full w-auto"
+            />
+          ))}
+
+          {[...Array(30)].map((v, i) => (
+            <Poster
+              key={i}
+              src={latestManga[0].poster}
+              iconSize={4}
+              className="h-full w-auto"
+            />
+          ))}
+        </div>
+      </ScrollArea>
     </>
   )
 }
