@@ -1,6 +1,7 @@
 import BannerCarousel from "@/components/ui/banner-carousel"
 import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import ScrollList from "@/components/ui/scroll-list"
 
 import { prismadb } from "@/lib/db"
 
@@ -19,63 +20,28 @@ const HomePage = async () => {
     },
   })
 
-  const loop = () => {}
-
   return (
     <>
       <BannerCarousel />
 
-      <ScrollArea
-        type="always"
-        orientation="horizontal"
-        className="w-full grow-0 pb-4"
-      >
-        <div className="flex h-24 gap-2">
-          {latestAnime.map(anime => (
-            <Poster
-              key={anime.id}
-              src={anime.poster}
-              iconSize={4}
-              className="h-full w-auto"
-            />
-          ))}
-
-          {[...Array(30)].map((v, i) => (
-            <Poster
-              key={i}
-              src={latestAnime[0].poster}
-              iconSize={4}
-              className="h-full w-auto"
-            />
-          ))}
+      <div className="flex flex-col gap-2 px-4 lg:px-0">
+        <div className="w-full rounded-md">
+          <h3 className="text-xl font-bold tracking-tight">Latest Anime</h3>
         </div>
-      </ScrollArea>
 
-      <ScrollArea
-        type="always"
-        orientation="horizontal"
-        className="w-full grow-0 pb-4"
-      >
-        <div className="flex h-24 gap-2">
-          {latestManga.map(manga => (
-            <Poster
-              key={manga.id}
-              src={manga.poster}
-              iconSize={4}
-              className="h-full w-auto"
-            />
-          ))}
+        <ScrollList items={latestAnime} />
+      </div>
 
-          {[...Array(30)].map((v, i) => (
-            <Poster
-              key={i}
-              src={latestManga[0].poster}
-              iconSize={4}
-              className="h-full w-auto"
-            />
-          ))}
+      <div className="flex flex-col gap-2 px-4 lg:px-0">
+        <div className="w-full rounded-md">
+          <h3 className="text-xl font-bold tracking-tight">Latest Manga</h3>
         </div>
-      </ScrollArea>
+
+        <ScrollList
+          items={latestManga}
+          type="manga"
+        />
+      </div>
     </>
   )
 }
