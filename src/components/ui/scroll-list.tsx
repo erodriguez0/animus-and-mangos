@@ -1,11 +1,10 @@
 import { Anime, Character, Manga } from "@prisma/client"
 import Link from "next/link"
 
+import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { cn } from "@/lib/utils"
-
-import Poster from "./poster"
 
 interface ScrollListProps {
   items: (Anime | Manga)[]
