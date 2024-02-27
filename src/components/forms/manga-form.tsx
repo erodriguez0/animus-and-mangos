@@ -220,11 +220,12 @@ const MangaForm = ({ manga }: MangaFormProps) => {
                   <Poster
                     src={character.image}
                     aspect="square"
+                    iconSize={4}
                   />
                 </div>
 
                 <div className="flex flex-1">
-                  <p>{character.name}</p>
+                  <p className="text-sm">{character.name}</p>
                 </div>
 
                 <Button

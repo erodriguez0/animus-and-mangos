@@ -58,7 +58,7 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
 
           <ScrollArea
             type="always"
-            className="max-h-80 whitespace-pre-wrap break-all p-4"
+            className="max-h-80 whitespace-pre-wrap break-all p-4 text-sm"
           >
             {anime.synopsis}
           </ScrollArea>

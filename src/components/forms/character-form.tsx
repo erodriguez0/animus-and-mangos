@@ -171,11 +171,14 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
                 className="flex gap-2"
               >
                 <div className="w-10">
-                  <Poster src={anime.poster} />
+                  <Poster
+                    src={anime.poster}
+                    iconSize={4}
+                  />
                 </div>
 
                 <div className="flex flex-1">
-                  <p>{anime.title}</p>
+                  <p className="text-sm">{anime.title}</p>
                 </div>
 
                 <Button
@@ -206,6 +209,37 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
         >
           {character ? "Save Changes" : "Create Character"}
         </Button>
+
+        {mangaPreview.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {mangaPreview.map(manga => (
+              <div
+                key={manga.id}
+                className="flex gap-2"
+              >
+                <div className="w-10">
+                  <Poster
+                    src={manga.poster}
+                    iconSize={4}
+                  />
+                </div>
+
+                <div className="flex flex-1">
+                  <p className="text-sm">{manga.title}</p>
+                </div>
+
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => remove(manga.id, "manga")}
+                  className="h-full"
+                >
+                  <Trash2Icon className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
       </form>
     </Form>
   )
