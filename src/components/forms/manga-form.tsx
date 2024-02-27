@@ -93,6 +93,7 @@ const MangaForm = ({ manga }: MangaFormProps) => {
       const data: Manga = await res.json()
 
       router.push(`/manga/${data.id}`)
+      router.refresh()
     } catch (error) {
       setError("Something went wrong, try again later")
     }

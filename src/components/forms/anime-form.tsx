@@ -99,6 +99,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
       const data: Anime = await res.json()
 
       router.push(`/anime/${data.id}`)
+      router.refresh()
     } catch (error) {
       setError("Something went wrong, try again later")
     }

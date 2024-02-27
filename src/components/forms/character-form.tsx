@@ -88,6 +88,7 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
       const data: Character = await res.json()
 
       router.push(`/character/${data.id}`)
+      router.refresh()
     } catch (error) {
       setError("Something went wrong, try again later")
     }
@@ -203,13 +204,6 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
           disabled={form.formState.isSubmitting}
         />
 
-        <Button
-          type="submit"
-          className="md:w-fit"
-        >
-          {character ? "Save Changes" : "Create Character"}
-        </Button>
-
         {mangaPreview.length > 0 && (
           <div className="flex flex-col gap-2">
             {mangaPreview.map(manga => (
@@ -240,6 +234,13 @@ const CharacterForm = ({ character }: CharacterFormProps) => {
             ))}
           </div>
         )}
+
+        <Button
+          type="submit"
+          className="md:w-fit"
+        >
+          {character ? "Save Changes" : "Create Character"}
+        </Button>
       </form>
     </Form>
   )

@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import CharacterScrollList from "@/components/ui/character-list"
 import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import ScrollList from "@/components/ui/scroll-list"
 import {
   Table,
   TableBody,
@@ -18,29 +19,34 @@ import { getAuthSession } from "@/lib/auth"
 import { prismadb } from "@/lib/db"
 import { cn } from "@/lib/utils"
 
-interface AnimeDetailsPageProps {
+interface CharacterDetailsPageProps {
   params: {
     id: string
   }
 }
 
-const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
+const CharacterDetailsPage = async ({ params }: CharacterDetailsPageProps) => {
   const session = await getAuthSession()
 
-  const anime = await prismadb.anime.findUnique({
+  const character = await prismadb.character.findUnique({
     where: {
       id: params.id,
     },
     include: {
-      characters: {
+      anime: {
         include: {
-          character: true,
+          anime: true,
+        },
+      },
+      manga: {
+        include: {
+          manga: true,
         },
       },
     },
   })
 
-  if (!anime) {
+  if (!character) {
     notFound()
   }
 
@@ -48,20 +54,22 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
     <>
       <div className="flex flex-col lg:h-96 lg:flex-row">
         <Poster
-          src={anime.poster}
+          src={character.image}
           className="mx-auto h-96 w-fit lg:h-full lg:w-auto"
         />
 
         <div className="flex h-full flex-1 flex-col">
           <div className="flex h-fit w-full items-center rounded-md bg-secondary p-4 text-secondary-foreground lg:h-16">
-            <h2 className="text-xl font-bold tracking-tight">{anime.title}</h2>
+            <h2 className="text-xl font-bold tracking-tight">
+              {character.name}
+            </h2>
           </div>
 
           <ScrollArea
             type="always"
             className="max-h-80 whitespace-pre-wrap break-all p-4 text-sm"
           >
-            {anime.synopsis}
+            {character.bio}
           </ScrollArea>
         </div>
       </div>
@@ -70,7 +78,7 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
         <Button className="w-fit">Add To List</Button>
         {session?.user.role === UserRole.ADMIN && (
           <Link
-            href={`/dashboard/anime/${anime.id}`}
+            href={`/dashboard/character/${character.id}`}
             className={cn(buttonVariants({ variant: "secondary" }))}
           >
             Edit
@@ -85,44 +93,37 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
               <TableRow>
                 <TableCell>Format</TableCell>
                 <TableCell className="flex justify-end">
-                  {anime.format}
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>Status</TableCell>
-                <TableCell className="flex justify-end capitalize">
-                  {anime.status?.replaceAll("_", " ").toLowerCase()}
+                  {/* {character.format} */}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Season</TableCell>
                 <TableCell className="flex justify-end capitalize">
-                  {anime.season?.toLowerCase() || ""}{" "}
-                  {anime.season && anime.year ? anime.year : "N/A"}
+                  {/* {character.season?.toLowerCase() || ""}{" "}
+                  {anime.season && anime.year ? anime.year : "N/A"} */}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Episodes</TableCell>
                 <TableCell className="flex justify-end">
-                  {anime.episode_count || "N/A"}
+                  {/* {anime.episode_count || "N/A"} */}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Source</TableCell>
                 <TableCell className="flex justify-end capitalize">
-                  {anime.source_type?.replaceAll("_", " ").toLowerCase() ||
-                    "N/A"}
+                  {/* {anime.source_type?.replaceAll("_", " ").toLowerCase() ||
+                    "N/A"} */}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Age Rating</TableCell>
                 <TableCell className="flex justify-end">
-                  {anime.age_rating?.replaceAll("_", " ") || "N/A"}
+                  {/* {anime.age_rating?.replaceAll("_", " ") || "N/A"} */}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -131,11 +132,21 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
 
         <div className="flex flex-col gap-4 px-4 lg:px-0">
           <div className="w-full rounded-md">
-            <h3 className="text-lg font-bold tracking-tight">Characters</h3>
+            <h3 className="text-lg font-bold tracking-tight">Anime</h3>
           </div>
 
-          <CharacterScrollList
-            characters={anime.characters.map(c => c.character)}
+          <ScrollList
+            items={character.anime.map(a => a.anime)}
+            type="anime"
+          />
+
+          <div className="w-full rounded-md">
+            <h3 className="text-lg font-bold tracking-tight">Manga</h3>
+          </div>
+
+          <ScrollList
+            items={character.manga.map(m => m.manga)}
+            type="manga"
           />
         </div>
       </div>
@@ -143,4 +154,4 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
   )
 }
 
-export default AnimeDetailsPage
+export default CharacterDetailsPage
