@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils"
 
 interface PosterProps {
   src?: string | null
-  aspect?: "auto" | "square" | "video" | "anime"
+  aspect?: "auto" | "square" | "video" | "poster"
   iconSize?: number
   className?: string
 }
 
 const Poster = ({
   src = "",
-  aspect = "anime",
+  aspect = "poster",
   iconSize = 12,
   className,
 }: PosterProps) => {
@@ -20,7 +20,7 @@ const Poster = ({
     auto: "aspect-auto",
     square: "aspect-square",
     video: "aspect-video",
-    anime: "aspect-[225/325]",
+    poster: "aspect-[225/325]",
   }
 
   return (

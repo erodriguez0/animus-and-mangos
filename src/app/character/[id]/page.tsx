@@ -144,10 +144,12 @@ const CharacterDetailsPage = async ({ params }: CharacterDetailsPageProps) => {
             <h3 className="text-lg font-bold tracking-tight">Manga</h3>
           </div>
 
-          <ScrollList
-            items={character.manga.map(m => m.manga)}
-            type="manga"
-          />
+          <div className="w-full lg:max-w-[998.17px]">
+            <ScrollList
+              items={character.manga.map(m => m.manga)}
+              type="manga"
+            />
+          </div>
         </div>
       </div>
     </>

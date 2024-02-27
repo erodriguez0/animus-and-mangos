@@ -5,11 +5,10 @@ import { ChevronDownIcon, EditIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
+import { Button, buttonVariants } from "@/components/ui/button"
 import Poster from "@/components/ui/poster"
 
 import { cn } from "@/lib/utils"
-
-import { Button, buttonVariants } from "./button"
 
 interface ListProps {
   title?: string

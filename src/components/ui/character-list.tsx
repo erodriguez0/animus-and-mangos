@@ -22,11 +22,11 @@ const CharacterScrollList = ({
     },
     sm: {
       height: "h-32 md:h-36 lg:h-40 xl:h-44",
-      width: "h-32 md:h-36 lg:h-40 xl:h-44",
+      width: "w-32 md:w-36 lg:w-40 xl:w-44",
     },
     lg: {
       height: "h-40 md:h-44 lg:h-48 xl:h-52",
-      width: "h-40 md:h-44 lg:h-48 xl:h-52",
+      width: "w-40 md:w-44 lg:w-48 xl:w-52",
     },
   }
 
@@ -41,6 +41,7 @@ const CharacterScrollList = ({
           <Link
             key={c.id}
             href={`/character/${c.id}`}
+            title={c.name}
             className={cn("flex flex-col gap-2", sizes[size].width)}
           >
             <Poster

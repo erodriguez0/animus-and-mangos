@@ -22,15 +22,15 @@ const ScrollList = ({
   const sizes = {
     default: {
       height: "h-44 md:h-48 lg:h-52 xl:h-56",
-      width: "w-44 md:w-48 lg:w-52 xl:w-56",
+      width: "w-36 md:w-40 lg:w-44 xl:w-48",
     },
     sm: {
       height: "h-40 md:h-44 lg:h-48 xl:h-52",
-      width: "w-40 md:w-44 lg:w-48 xl:w-52",
+      width: "w-32 md:w-36 lg:w-40 xl:w-44",
     },
     lg: {
       height: "h-48 md:h-52 lg:h-56 xl:h-60",
-      width: "w-48 md:w-52 lg:w-56 xl:w-60",
+      width: "w-40 md:w-44 lg:w-48 xl:w-52",
     },
   }
 
@@ -45,13 +45,14 @@ const ScrollList = ({
           <Link
             key={item.id}
             href={`/${type}/${item.id}`}
+            title={item.title}
             className={cn("flex flex-col gap-2", sizes[size].width)}
           >
             <Poster
               key={item.id}
               src={item.poster}
               iconSize={6}
-              className={cn("h-auto")}
+              className="h-full"
             />
 
             <span className="line-clamp-1 text-sm">{item.title}</span>

@@ -79,7 +79,7 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="w-full lg:max-w-[265.84px]">
+        <div className="w-full shrink-0 lg:max-w-[265.84px]">
           <Table className="w-full">
             <TableBody>
               <TableRow>
@@ -129,14 +129,16 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
           </Table>
         </div>
 
-        <div className="flex flex-col gap-4 px-4 lg:px-0">
+        <div className="flex w-full flex-col gap-4 px-4 lg:px-0">
           <div className="w-full rounded-md">
             <h3 className="text-lg font-bold tracking-tight">Characters</h3>
           </div>
 
-          <CharacterScrollList
-            characters={anime.characters.map(c => c.character)}
-          />
+          <div className="w-full lg:max-w-[998.17px]">
+            <CharacterScrollList
+              characters={anime.characters.map(c => c.character)}
+            />
+          </div>
         </div>
       </div>
     </>
