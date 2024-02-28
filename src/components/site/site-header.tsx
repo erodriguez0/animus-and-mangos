@@ -1,5 +1,5 @@
 import { UserRole } from "@prisma/client"
-import { BookIcon, LayoutDashboardIcon, TvIcon } from "lucide-react"
+import { BookIcon, LayoutDashboardIcon, TvIcon, UserIcon } from "lucide-react"
 import Link from "next/link"
 
 import { buttonVariants } from "@/components/ui/button"
@@ -76,6 +76,16 @@ const SiteHeader = async () => {
                 )}
               >
                 <BookIcon className="h-4 w-4" />
+              </Link>
+
+              <Link
+                href={`/user/${session.user.username}`}
+                className={cn(
+                  buttonVariants({ size: "icon", variant: "outline" }),
+                  "shrink-0",
+                )}
+              >
+                <UserIcon className="h-4 w-4" />
               </Link>
 
               <ThemeToggle />

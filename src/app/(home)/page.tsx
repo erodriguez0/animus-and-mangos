@@ -1,6 +1,4 @@
 import BannerCarousel from "@/components/ui/banner-carousel"
-import Poster from "@/components/ui/poster"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import ScrollList from "@/components/ui/scroll-list"
 
 import { prismadb } from "@/lib/db"

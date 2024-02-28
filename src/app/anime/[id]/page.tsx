@@ -6,13 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import CharacterScrollList from "@/components/ui/character-list"
 import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 import { getAuthSession } from "@/lib/auth"
 import { prismadb } from "@/lib/db"
