@@ -1,12 +1,20 @@
 import { prismadb } from "@/lib/db"
 
-import { SearchMode, SearchResults } from "@/types/custom"
+import { SearchResults } from "@/types/custom"
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url)
     const query = url.searchParams.get("q")
-    const mode = url.searchParams.get("mode")
+    const mode = url.searchParams.get("mode") || "all"
+    // const limit = url.searchParams.get("limit")
+    //   ? parseInt(url.searchParams.get("limit") as string, 10)
+    //   : 3
+    const limit = mode === "all" ? 10 : 3
+    const page = url.searchParams.get("page")
+      ? parseInt(url.searchParams.get("page") as string, 10)
+      : 0
+    const skip = page * limit
 
     if (!query) {
       return Response.json({ message: "Invalid search query" }, { status: 400 })
@@ -26,7 +34,8 @@ export async function GET(req: Request) {
             mode: "insensitive",
           },
         },
-        take: 3,
+        skip: skip,
+        take: limit,
       })
     } else if (mode === "manga" || mode === "all") {
       data.manga = await prismadb.manga.findMany({
@@ -36,7 +45,8 @@ export async function GET(req: Request) {
             mode: "insensitive",
           },
         },
-        take: 3,
+        skip: skip,
+        take: limit,
       })
     } else if (mode === "character" || mode === "all") {
       data.characters = await prismadb.character.findMany({
@@ -46,7 +56,8 @@ export async function GET(req: Request) {
             mode: "insensitive",
           },
         },
-        take: 3,
+        skip: skip,
+        take: limit,
       })
     }
 
