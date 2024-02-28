@@ -66,17 +66,20 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
         </div>
       </div>
 
-      <div className="flex w-full gap-4 rounded-md border-y p-4 lg:border-x">
-        <Button className="w-fit">Add To List</Button>
-        {session?.user.role === UserRole.ADMIN && (
-          <Link
-            href={`/dashboard/anime/${anime.id}`}
-            className={cn(buttonVariants({ variant: "secondary" }))}
-          >
-            Edit
-          </Link>
-        )}
-      </div>
+      {session && (
+        <div className="flex w-full gap-4 rounded-md border-y p-4 lg:border-x">
+          <Button className="w-fit">Add To List</Button>
+
+          {session?.user.role === UserRole.ADMIN && (
+            <Link
+              href={`/dashboard/anime/${anime.id}`}
+              className={cn(buttonVariants({ variant: "secondary" }))}
+            >
+              Edit
+            </Link>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col gap-4 lg:flex-row">
         <div className="w-full shrink-0 lg:max-w-[265.84px]">
