@@ -46,20 +46,20 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
 
   return (
     <>
-      <div className="flex flex-col lg:h-96 lg:flex-row">
+      <div className="flex flex-col lg:h-96 lg:flex-row lg:gap-4">
         <Poster
           src={anime.poster}
           className="mx-auto h-96 w-fit lg:h-full lg:w-auto"
         />
 
-        <div className="flex h-full flex-1 flex-col">
+        <div className="flex h-full flex-1 flex-col gap-4">
           <div className="flex h-fit w-full items-center rounded-md bg-secondary p-4 text-secondary-foreground lg:h-16">
             <h2 className="text-xl font-bold tracking-tight">{anime.title}</h2>
           </div>
 
           <ScrollArea
             type="always"
-            className="max-h-80 whitespace-pre-wrap break-all p-4 text-sm"
+            className="max-h-80 whitespace-pre-wrap break-all px-4 text-sm"
           >
             {anime.synopsis}
           </ScrollArea>
@@ -100,14 +100,14 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
                 <TableCell>Season</TableCell>
                 <TableCell className="flex justify-end capitalize">
                   {anime.season?.toLowerCase() || ""}{" "}
-                  {anime.season && anime.year ? anime.year : "N/A"}
+                  {anime.season && anime.year ? anime.year : "--"}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Episodes</TableCell>
                 <TableCell className="flex justify-end">
-                  {anime.episode_count || "N/A"}
+                  {anime.episode_count || "--"}
                 </TableCell>
               </TableRow>
 
@@ -115,14 +115,14 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
                 <TableCell>Source</TableCell>
                 <TableCell className="flex justify-end capitalize">
                   {anime.source_type?.replaceAll("_", " ").toLowerCase() ||
-                    "N/A"}
+                    "--"}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Age Rating</TableCell>
                 <TableCell className="flex justify-end">
-                  {anime.age_rating?.replaceAll("_", " ") || "N/A"}
+                  {anime.age_rating?.replaceAll("_", " ") || "--"}
                 </TableCell>
               </TableRow>
             </TableBody>

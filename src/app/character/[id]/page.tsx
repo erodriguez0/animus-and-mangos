@@ -52,13 +52,13 @@ const CharacterDetailsPage = async ({ params }: CharacterDetailsPageProps) => {
 
   return (
     <>
-      <div className="flex flex-col lg:h-96 lg:flex-row">
+      <div className="flex flex-col lg:h-96 lg:flex-row lg:gap-4">
         <Poster
           src={character.image}
           className="mx-auto h-96 w-fit lg:h-full lg:w-auto"
         />
 
-        <div className="flex h-full flex-1 flex-col">
+        <div className="flex h-full flex-1 flex-col gap-4">
           <div className="flex h-fit w-full items-center rounded-md bg-secondary p-4 text-secondary-foreground lg:h-16">
             <h2 className="text-xl font-bold tracking-tight">
               {character.name}
@@ -67,7 +67,7 @@ const CharacterDetailsPage = async ({ params }: CharacterDetailsPageProps) => {
 
           <ScrollArea
             type="always"
-            className="max-h-80 whitespace-pre-wrap break-all p-4 text-sm"
+            className="max-h-80 whitespace-pre-wrap break-all px-4 text-sm"
           >
             {character.bio}
           </ScrollArea>
@@ -91,40 +91,45 @@ const CharacterDetailsPage = async ({ params }: CharacterDetailsPageProps) => {
           <Table className="w-full">
             <TableBody>
               <TableRow>
-                <TableCell>Format</TableCell>
+                <TableCell>Age</TableCell>
+                <TableCell className="flex justify-end">--</TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell>Birthdate</TableCell>
+                <TableCell className="flex justify-end">--</TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell>Origin</TableCell>
                 <TableCell className="flex justify-end">
-                  {/* {character.format} */}
+                  <div
+                    className="line-clamp-1"
+                    title="Some place"
+                  >
+                    --
+                  </div>
                 </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Season</TableCell>
-                <TableCell className="flex justify-end capitalize">
-                  {/* {character.season?.toLowerCase() || ""}{" "}
-                  {anime.season && anime.year ? anime.year : "N/A"} */}
-                </TableCell>
+                <TableCell>Race</TableCell>
+                <TableCell className="flex justify-end">--</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Episodes</TableCell>
-                <TableCell className="flex justify-end">
-                  {/* {anime.episode_count || "N/A"} */}
-                </TableCell>
+                <TableCell>Gender</TableCell>
+                <TableCell className="flex justify-end">--</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Source</TableCell>
-                <TableCell className="flex justify-end capitalize">
-                  {/* {anime.source_type?.replaceAll("_", " ").toLowerCase() ||
-                    "N/A"} */}
-                </TableCell>
+                <TableCell>Height</TableCell>
+                <TableCell className="flex justify-end">--</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Age Rating</TableCell>
-                <TableCell className="flex justify-end">
-                  {/* {anime.age_rating?.replaceAll("_", " ") || "N/A"} */}
-                </TableCell>
+                <TableCell>Weight</TableCell>
+                <TableCell className="flex justify-end">--</TableCell>
               </TableRow>
             </TableBody>
           </Table>

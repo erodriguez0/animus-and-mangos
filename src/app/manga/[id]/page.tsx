@@ -40,20 +40,20 @@ const MangaDetailsPage = async ({ params }: MangaDetailsPageProps) => {
 
   return (
     <>
-      <div className="flex flex-col lg:h-96 lg:flex-row">
+      <div className="flex flex-col lg:h-96 lg:flex-row lg:gap-4">
         <Poster
           src={manga.poster}
           className="mx-auto h-96 w-fit lg:h-full lg:w-auto"
         />
 
-        <div className="flex h-full flex-1 flex-col">
+        <div className="flex h-full flex-1 flex-col gap-4">
           <div className="flex h-fit w-full items-center rounded-md bg-secondary p-4 text-secondary-foreground lg:h-16">
             <h2 className="text-xl font-bold tracking-tight">{manga.title}</h2>
           </div>
 
           <ScrollArea
             type="always"
-            className="max-h-80 whitespace-pre-wrap break-all p-4 text-sm"
+            className="max-h-80 whitespace-pre-wrap break-all px-4 text-sm"
           >
             {manga.synopsis}
           </ScrollArea>
@@ -93,14 +93,14 @@ const MangaDetailsPage = async ({ params }: MangaDetailsPageProps) => {
               <TableRow>
                 <TableCell>Volumes</TableCell>
                 <TableCell className="flex justify-end">
-                  {manga.volumes || "N/A"}
+                  {manga.volumes || "--"}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Chapters</TableCell>
                 <TableCell className="flex justify-end">
-                  {manga.chapters || "N/A"}
+                  {manga.chapters || "--"}
                 </TableCell>
               </TableRow>
             </TableBody>
