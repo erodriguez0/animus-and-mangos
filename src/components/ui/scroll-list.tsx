@@ -40,7 +40,7 @@ const ScrollList = ({
       orientation="horizontal"
       className={cn("w-full grow-0 pb-4", className)}
     >
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         {items.map(item => (
           <Link
             key={item.id}

@@ -36,7 +36,7 @@ const CharacterScrollList = ({
       orientation="horizontal"
       className="w-full grow-0 pb-4"
     >
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         {characters.map(c => (
           <Link
             key={c.id}
