@@ -2,9 +2,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { buttonVariants } from "@/components/ui/button"
+import ScrollList from "@/components/ui/scroll-list"
 
 import CreateListModal from "@/components/modals/create-list-modal"
 
+import { getAuthSession } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
 import { ExtendedUser } from "@/types/custom"
@@ -16,6 +18,8 @@ interface UserProfilePageProps {
 }
 
 const UserProfilePage = async ({ params }: UserProfilePageProps) => {
+  const session = await getAuthSession()
+
   const res = await fetch(
     `${process.env.API_URL}/api/user/${params.username}`,
     {
@@ -35,16 +39,18 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
   return (
     <>
       {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
-      <div className="px-4 py-4 lg:px-0">
-        <CreateListModal />
-      </div>
+      {session?.user.username === params.username && (
+        <div className="px-4 py-4 lg:px-0">
+          <CreateListModal />
+        </div>
+      )}
 
       <div className="flex flex-col gap-2 px-4 lg:px-0">
-        <h3 className="text-2xl font-semibold tracking-tight">Anime Lists</h3>
+        <h3 className="text-xl font-semibold tracking-tight">Anime</h3>
         <div className="border-t" />
       </div>
 
-      <div className="flex flex-col items-center justify-between px-4 lg:px-0">
+      <div className="flex flex-col gap-4 px-4 lg:px-0">
         {user.anime_lists.length === 0 && (
           <p className="text-sm">No anime lists</p>
         )}
@@ -53,34 +59,47 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
           user.anime_lists.map(list => (
             <div
               key={list.id}
-              className="flex w-full items-center justify-between"
+              className="flex flex-col gap-2"
             >
-              <Link
-                href="/list"
-                className="text-xl font-semibold tracking-tight"
-              >
-                {list.name}
-              </Link>
+              <div className="flex w-full items-center justify-between">
+                <Link
+                  href="/list"
+                  className="text-lg font-semibold tracking-tight"
+                >
+                  {list.name}
+                </Link>
 
-              <Link
-                href="/list/"
-                className={cn(
-                  buttonVariants({ size: "sm", variant: "link" }),
-                  "text-foreground",
-                )}
-              >
-                View All
-              </Link>
+                <Link
+                  href="/list/"
+                  className={cn(
+                    buttonVariants({ size: "sm", variant: "link" }),
+                    "text-foreground",
+                  )}
+                >
+                  View All
+                </Link>
+              </div>
+
+              {list.anime.length < 1 ? (
+                <div className="text-sm text-muted-foreground">
+                  Empty Anime List
+                </div>
+              ) : (
+                <ScrollList
+                  items={list.anime.map(item => item.anime)}
+                  type="anime"
+                />
+              )}
             </div>
           ))}
       </div>
 
       <div className="flex flex-col gap-2 px-4 lg:px-0">
-        <h3 className="text-2xl font-semibold tracking-tight">Manga Lists</h3>
+        <h3 className="text-xl font-semibold tracking-tight">Manga</h3>
         <div className="border-t" />
       </div>
 
-      <div className="flex flex-col items-center justify-between px-4 lg:px-0">
+      <div className="flex flex-col gap-4 px-4 lg:px-0">
         {user.manga_lists.length === 0 && (
           <p className="text-sm">No manga lists</p>
         )}
@@ -89,24 +108,37 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
           user.manga_lists.map(list => (
             <div
               key={list.id}
-              className="flex w-full items-center justify-between"
+              className="flex flex-col gap-2"
             >
-              <Link
-                href="/list"
-                className="text-xl font-semibold tracking-tight"
-              >
-                {list.name}
-              </Link>
+              <div className="flex w-full items-center justify-between">
+                <Link
+                  href="/list"
+                  className="text-lg font-semibold tracking-tight"
+                >
+                  {list.name}
+                </Link>
 
-              <Link
-                href="/list/"
-                className={cn(
-                  buttonVariants({ size: "sm", variant: "link" }),
-                  "text-foreground",
-                )}
-              >
-                View All
-              </Link>
+                <Link
+                  href="/list/"
+                  className={cn(
+                    buttonVariants({ size: "sm", variant: "link" }),
+                    "text-foreground",
+                  )}
+                >
+                  View All
+                </Link>
+              </div>
+
+              {list.manga.length < 1 ? (
+                <div className="text-sm text-muted-foreground">
+                  Empty Manga List
+                </div>
+              ) : (
+                <ScrollList
+                  items={list.manga.map(item => item.manga)}
+                  type="manga"
+                />
+              )}
             </div>
           ))}
       </div>

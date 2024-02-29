@@ -34,52 +34,72 @@ export type Routes = {
 export type SearchMode = "anime" | "manga" | "character" | "all"
 
 export type ExtendedUser = User & {
-  anime_lists: AnimeList[] & {
-    list_anime: ListAnime[] & {
+  anime_lists: Array<
+    AnimeList & {
+      anime: Array<
+        ListAnime & {
+          anime: Anime
+        }
+      >
+    }
+  >
+  manga_lists: Array<
+    MangaList & {
+      manga: Array<
+        ListManga & {
+          manga: Manga
+        }
+      >
+    }
+  >
+  character_lists: Array<
+    CharacterList & {
+      characters: Array<
+        ListCharacter & {
+          character: Character
+        }
+      >
+    }
+  >
+  anime_ratings: Array<
+    AnimeRating & {
       anime: Anime
     }
-  }
-  manga_lists: MangaList[] & {
-    list_manga: ListManga[] & {
+  >
+  manga_ratings: Array<
+    MangaRating & {
       manga: Manga
     }
-  }
-  character_lists: CharacterList[] & {
-    list_character: ListCharacter[] & {
-      character: Character
-    }
-  }
-  anime_ratings: AnimeRating[] & {
-    anime: Anime
-  }
-  manga_ratings: MangaRating[] & {
-    manga: Manga
-  }
+  >
 }
 
 export type ExtendedAnime = Anime & {
-  characters: AnimeCharacter &
-    {
+  characters: Array<
+    AnimeCharacter & {
       character: Character
-    }[]
+    }
+  >
 }
 
 export type ExtendedManga = Manga & {
-  characters: AnimeCharacter &
-    {
+  characters: Array<
+    AnimeCharacter & {
       character: Character
-    }[]
+    }
+  >
 }
 
 export type ExtendedCharacter = Character & {
-  anime: AnimeCharacter &
-    {
+  anime: Array<
+    AnimeCharacter & {
       anime: Anime
-    }[]
-  manga: MangaCharacter &
-    {
+    }
+  >
+  manga: Array<
+    MangaCharacter & {
       manga: Manga
-    }[]
+    }
+  >
 }
 
 export type SearchResults = {
