@@ -153,6 +153,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
         <div className="grid grid-cols-2 gap-8">
           <div className="col-span-2 md:col-span-1">
             <FormSelect
+              isOptional
               name="format"
               control={form.control}
               label="Format"
@@ -164,6 +165,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
 
           <div className="col-span-2 lg:col-span-1">
             <FormSelect
+              isOptional
               name="status"
               control={form.control}
               label="Status"
@@ -177,6 +179,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-6">
             <FormSelect
+              isOptional
               name="season"
               control={form.control}
               label="Season"
@@ -212,6 +215,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
         <div className="grid grid-cols-2 gap-8">
           <div className="col-span-2 md:col-span-1">
             <FormSelect
+              isOptional
               name="source_type"
               control={form.control}
               label="Source"
@@ -223,6 +227,7 @@ const AnimeForm = ({ anime }: AnimeFormProps) => {
 
           <div className="col-span-2 lg:col-span-1">
             <FormSelect
+              isOptional
               name="age_rating"
               control={form.control}
               label="Age Rating"

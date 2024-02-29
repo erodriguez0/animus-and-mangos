@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 import CreateListModal from "@/components/modals/create-list-modal"
 
@@ -44,15 +44,35 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
         <div className="border-t" />
       </div>
 
-      <div className="flex items-center justify-between px-4 lg:px-0">
-        <h4 className="text-xl font-semibold tracking-tight">Favorites</h4>
+      <div className="flex flex-col items-center justify-between px-4 lg:px-0">
+        {user.anime_lists.length === 0 && (
+          <p className="text-sm">No anime lists</p>
+        )}
 
-        <Link
-          href="/list/"
-          className={cn(buttonVariants({ size: "sm", variant: "secondary" }))}
-        >
-          View All
-        </Link>
+        {user.anime_lists.length > 0 &&
+          user.anime_lists.map(list => (
+            <div
+              key={list.id}
+              className="flex w-full items-center justify-between"
+            >
+              <Link
+                href="/list"
+                className="text-xl font-semibold tracking-tight"
+              >
+                {list.name}
+              </Link>
+
+              <Link
+                href="/list/"
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "link" }),
+                  "text-foreground",
+                )}
+              >
+                View All
+              </Link>
+            </div>
+          ))}
       </div>
 
       <div className="flex flex-col gap-2 px-4 lg:px-0">
@@ -60,27 +80,34 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
         <div className="border-t" />
       </div>
 
-      <div className="flex items-center justify-between px-4 lg:px-0">
+      <div className="flex flex-col items-center justify-between px-4 lg:px-0">
         {user.manga_lists.length === 0 && (
           <p className="text-sm">No manga lists</p>
         )}
 
         {user.manga_lists.length > 0 &&
           user.manga_lists.map(list => (
-            <>
-              <h4 className="text-xl font-semibold tracking-tight">
+            <div
+              key={list.id}
+              className="flex w-full items-center justify-between"
+            >
+              <Link
+                href="/list"
+                className="text-xl font-semibold tracking-tight"
+              >
                 {list.name}
-              </h4>
+              </Link>
 
               <Link
                 href="/list/"
                 className={cn(
-                  buttonVariants({ size: "sm", variant: "secondary" }),
+                  buttonVariants({ size: "sm", variant: "link" }),
+                  "text-foreground",
                 )}
               >
                 View All
               </Link>
-            </>
+            </div>
           ))}
       </div>
     </>

@@ -24,6 +24,7 @@ interface FormSelectProps<T extends FieldValues> {
   disabled?: boolean
   className?: string
   showError?: boolean
+  isOptional?: boolean
 }
 
 const FormSelect = <T extends FieldValues>({
@@ -35,6 +36,7 @@ const FormSelect = <T extends FieldValues>({
   disabled = false,
   className,
   showError = false,
+  isOptional,
 }: FormSelectProps<T>) => {
   return (
     <FormField
@@ -58,7 +60,9 @@ const FormSelect = <T extends FieldValues>({
             </FormControl>
 
             <SelectContent>
-              <SelectItem value="-">{placeholder || "\u00a0"}</SelectItem>
+              {isOptional && (
+                <SelectItem value="-">{placeholder || "\u00a0"}</SelectItem>
+              )}
 
               {Object.entries(options).map(item => (
                 <SelectItem

@@ -7,6 +7,8 @@ import SiteHeader from "@/components/site/site-header"
 
 import { ExtendedUser } from "@/types/custom"
 
+export const revalidate = 0
+
 interface UserProfileLayoutProps {
   children: ReactNode
   params: {
