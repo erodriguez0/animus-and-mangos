@@ -15,17 +15,25 @@ import {
 } from "@/components/ui/command"
 import { Input } from "@/components/ui/input"
 
+import { cn } from "@/lib/utils"
+
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
 import { SearchMode, SearchResults } from "@/types/custom"
 
 interface SearchProps {
   onClick?: (item: Anime | Manga | Character, mode: SearchMode) => void
-  mode: SearchMode | "all"
+  mode?: SearchMode | "all"
   disabled?: boolean
+  className?: string
 }
 
-const Search = ({ onClick, mode, disabled }: SearchProps) => {
+const Search = ({
+  onClick,
+  mode = "all",
+  disabled,
+  className,
+}: SearchProps) => {
   const [input, setInput] = useState<string>("")
   const pathname = usePathname()
   const commandRef = useRef<HTMLDivElement>(null)
@@ -74,11 +82,14 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
     setInput("")
   }, [pathname])
 
-  const handleOnClick = (item: Anime | Manga | Character) => {
+  const handleOnClick = (
+    item: Anime | Manga | Character,
+    type: "anime" | "manga" | "character",
+  ) => {
     if (onClick && mode !== "all") {
       onClick(item, mode)
     } else {
-      router.push(`/${mode}/${item.id}`)
+      router.push(`/${type}/${item.id}`)
       router.refresh()
     }
   }
@@ -86,7 +97,10 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
   return (
     <Command
       ref={commandRef}
-      className="relative z-50 h-fit w-full overflow-visible rounded-md border"
+      className={cn(
+        "relative z-50 h-fit w-full overflow-visible rounded-md border",
+        className,
+      )}
     >
       <Input
         // disabled={isFetching}
@@ -95,7 +109,7 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
           debounceRequest()
         }}
         value={input}
-        placeholder={`Search ${mode}...`}
+        placeholder={`Search${mode === "all" ? "" : ` ${mode}`}...`}
         disabled={disabled}
         className="border-1"
       />
@@ -108,7 +122,7 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
             <CommandGroup heading="Anime">
               {results?.anime.map(item => (
                 <CommandItem
-                  onSelect={() => handleOnClick(item)}
+                  onSelect={() => handleOnClick(item, "anime")}
                   key={item.id}
                   value={item.title}
                 >
@@ -122,7 +136,7 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
             <CommandGroup heading="Manga">
               {results?.manga.map(item => (
                 <CommandItem
-                  onSelect={() => handleOnClick(item)}
+                  onSelect={() => handleOnClick(item, "manga")}
                   key={item.id}
                   value={item.title}
                 >
@@ -136,7 +150,7 @@ const Search = ({ onClick, mode, disabled }: SearchProps) => {
             <CommandGroup heading="Characters">
               {results?.characters.map(item => (
                 <CommandItem
-                  onSelect={() => handleOnClick(item)}
+                  onSelect={() => handleOnClick(item, "character")}
                   key={item.id}
                   value={item.name}
                 >

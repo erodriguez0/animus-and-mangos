@@ -37,7 +37,9 @@ export async function GET(req: Request) {
         skip: skip,
         take: limit,
       })
-    } else if (mode === "manga" || mode === "all") {
+    }
+
+    if (mode === "manga" || mode === "all") {
       data.manga = await prismadb.manga.findMany({
         where: {
           title: {
@@ -48,7 +50,9 @@ export async function GET(req: Request) {
         skip: skip,
         take: limit,
       })
-    } else if (mode === "character" || mode === "all") {
+    }
+
+    if (mode === "character" || mode === "all") {
       data.characters = await prismadb.character.findMany({
         where: {
           name: {

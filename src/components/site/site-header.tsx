@@ -5,6 +5,7 @@ import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import Header from "@/components/ui/header"
 import Logo from "@/components/ui/logo"
+import Search from "@/components/ui/search"
 
 import LogoutButton from "@/components/logout-button"
 import SiteDrawer from "@/components/site/site-drawer"
@@ -27,6 +28,8 @@ const SiteHeader = async () => {
       <div className="ml-auto flex h-full items-center justify-end">
         {/* Desktop */}
         <div className="hidden gap-2 lg:flex">
+          <Search className="w-80" />
+
           {!session && (
             <>
               <Link

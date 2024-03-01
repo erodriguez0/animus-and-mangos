@@ -38,7 +38,6 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
 
   return (
     <>
-      {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
       {session?.user.username === params.username && (
         <div className="px-4 py-4 lg:px-0">
           <CreateListModal />
