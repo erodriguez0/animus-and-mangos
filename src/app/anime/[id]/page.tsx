@@ -8,6 +8,8 @@ import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
+import UserListsModal from "@/components/modals/user-lists-modal"
+
 import { getAuthSession } from "@/lib/auth"
 import { prismadb } from "@/lib/db"
 import { cn } from "@/lib/utils"
@@ -62,7 +64,10 @@ const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
 
       {session && (
         <div className="flex w-full gap-4 rounded-md border-y p-4 lg:border-x">
-          <Button className="w-fit">Add To List</Button>
+          <UserListsModal
+            id={params.id}
+            mode="anime"
+          />
 
           {session?.user.role === UserRole.ADMIN && (
             <Link
