@@ -61,8 +61,8 @@ const SiteHeader = async () => {
                 </Link>
               )}
 
-              <Link
-                href={`/user/${session.user.username}/anime`}
+              {/* <Link
+                href={`/u/${session.user.username}/anime`}
                 className={cn(
                   buttonVariants({ size: "icon", variant: "outline" }),
                   "shrink-0",
@@ -72,17 +72,17 @@ const SiteHeader = async () => {
               </Link>
 
               <Link
-                href={`/user/${session.user.username}/manga`}
+                href={`/u/${session.user.username}/manga`}
                 className={cn(
                   buttonVariants({ size: "icon", variant: "outline" }),
                   "shrink-0",
                 )}
               >
                 <BookIcon className="h-4 w-4" />
-              </Link>
+              </Link> */}
 
               <Link
-                href={`/user/${session.user.username}`}
+                href={`/u/${session.user.username}`}
                 className={cn(
                   buttonVariants({ size: "icon", variant: "outline" }),
                   "shrink-0",

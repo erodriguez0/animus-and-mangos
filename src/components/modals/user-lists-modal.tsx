@@ -1,9 +1,16 @@
 "use client"
 
-import { AnimeList, CharacterList, MangaList } from "@prisma/client"
+import {
+  Anime,
+  AnimeList,
+  CharacterList,
+  ListAnime,
+  MangaList,
+} from "@prisma/client"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 
+import AddToListToggle from "@/components/ui/add-to-list-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Dialog,
@@ -24,9 +31,9 @@ interface UserListsModalProps {
 const UserListsModal = ({ mode, id }: UserListsModalProps) => {
   const { data: session } = useSession()
   const [open, setOpen] = useState<boolean>(false)
-  const [lists, setLists] = useState<(AnimeList | MangaList | CharacterList)[]>(
-    [],
-  )
+  const [lists, setLists] = useState<
+    Array<AnimeList & { anime: Array<ListAnime> }>
+  >([])
 
   const getLists = async () => {
     try {
@@ -73,9 +80,22 @@ const UserListsModal = ({ mode, id }: UserListsModalProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        {lists.map(list => (
-          <></>
-        ))}
+        <div className="flex flex-col gap-4">
+          {lists.map(list => (
+            <div
+              key={list.id}
+              className="flex items-center justify-between"
+            >
+              <p className="text-sm font-medium">{list.name}</p>
+              <AddToListToggle
+                id={id}
+                listId={list.id}
+                mode={mode}
+                exists={list.anime.map(a => a.anime_id).includes(id)}
+              />
+            </div>
+          ))}
+        </div>
       </DialogContent>
     </Dialog>
   )

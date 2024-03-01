@@ -10,6 +10,7 @@ interface ScrollListProps {
   items: (Anime | Manga)[]
   type?: "anime" | "manga"
   size?: "default" | "sm" | "lg"
+  limit?: number
   className?: string
 }
 
@@ -17,6 +18,7 @@ const ScrollList = ({
   items,
   type = "anime",
   size = "default",
+  limit = items.length,
   className,
 }: ScrollListProps) => {
   const sizes = {
@@ -26,11 +28,11 @@ const ScrollList = ({
     },
     sm: {
       height: "h-40 md:h-44 lg:h-48 xl:h-52",
-      width: "w-32 md:w-36 lg:w-40 xl:w-44",
+      width: "w-28 md:w-32 lg:w-36 xl:w-40",
     },
     lg: {
       height: "h-48 md:h-52 lg:h-56 xl:h-60",
-      width: "w-40 md:w-44 lg:w-48 xl:w-52",
+      width: "w-44 md:w-48 lg:w-52 xl:w-56",
     },
   }
 
@@ -41,23 +43,27 @@ const ScrollList = ({
       className={cn("w-full grow-0 pb-4", className)}
     >
       <div className="flex gap-4">
-        {items.map(item => (
-          <Link
-            key={item.id}
-            href={`/${type}/${item.id}`}
-            title={item.title}
-            className={cn("flex flex-col gap-2", sizes[size].width)}
-          >
-            <Poster
-              key={item.id}
-              src={item.poster}
-              iconSize={6}
-              className="h-full"
-            />
+        {items.map((item, idx) => {
+          if (idx >= limit) return null
 
-            <span className="line-clamp-1 text-sm">{item.title}</span>
-          </Link>
-        ))}
+          return (
+            <Link
+              key={item.id}
+              href={`/${type}/${item.id}`}
+              title={item.title}
+              className={cn("flex flex-col gap-2", sizes[size].width)}
+            >
+              <Poster
+                key={item.id}
+                src={item.poster}
+                iconSize={6}
+                className="h-full"
+              />
+
+              <span className="line-clamp-1 text-sm">{item.title}</span>
+            </Link>
+          )
+        })}
       </div>
     </ScrollArea>
   )

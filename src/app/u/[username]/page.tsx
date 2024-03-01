@@ -62,14 +62,14 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
             >
               <div className="flex w-full items-center justify-between">
                 <Link
-                  href="/list"
+                  href={`/u/${user.username}/a/${list.id}`}
                   className="text-lg font-semibold tracking-tight"
                 >
                   {list.name}
                 </Link>
 
                 <Link
-                  href="/list/"
+                  href={`/u/${user.username}/a/${list.id}`}
                   className={cn(
                     buttonVariants({ size: "sm", variant: "link" }),
                     "text-foreground",
@@ -87,6 +87,8 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
                 <ScrollList
                   items={list.anime.map(item => item.anime)}
                   type="anime"
+                  size="sm"
+                  limit={10}
                 />
               )}
             </div>
@@ -111,14 +113,14 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
             >
               <div className="flex w-full items-center justify-between">
                 <Link
-                  href="/list"
+                  href={`/u/${user.username}/m/${list.id}`}
                   className="text-lg font-semibold tracking-tight"
                 >
                   {list.name}
                 </Link>
 
                 <Link
-                  href="/list/"
+                  href={`/u/${user.username}/m/${list.id}`}
                   className={cn(
                     buttonVariants({ size: "sm", variant: "link" }),
                     "text-foreground",

@@ -36,7 +36,7 @@ const DashboardSidebar = async () => {
       <div className="flex gap-2 px-4">
         {session?.user ? (
           <Link
-            href={`/user/${session.user.username}`}
+            href={`/u/${session.user.username}`}
             className={cn(buttonVariants({ variant: "outline" }), "flex-1")}
           >
             <UserIcon className="h-4 w-4" />

@@ -26,7 +26,12 @@ const UserProfileLayout = async ({
   children,
   params,
 }: UserProfileLayoutProps) => {
-  const res = await fetch(`${process.env.API_URL}/api/user/${params.username}`)
+  const res = await fetch(
+    `${process.env.API_URL}/api/user/${params.username}`,
+    {
+      cache: "no-store",
+    },
+  )
 
   if (!res.ok) {
     notFound()

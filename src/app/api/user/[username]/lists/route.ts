@@ -30,6 +30,9 @@ export async function GET(req: Request, { params }: IParams) {
         where: {
           user_id: session.user.id,
         },
+        include: {
+          anime: true,
+        },
       })
     }
 
