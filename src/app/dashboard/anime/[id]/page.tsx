@@ -24,7 +24,7 @@ const DashboardAnimeFormPage = async ({
     )
   }
 
-  const res = await fetch(`${process.env.API_URL}/api/anime/${params.id}`, {
+  const res = await fetch(`${process.env.API_URL}/anime/${params.id}`, {
     method: "GET",
   })
 

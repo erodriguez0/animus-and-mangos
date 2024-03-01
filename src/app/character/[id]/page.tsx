@@ -19,6 +19,8 @@ import { getAuthSession } from "@/lib/auth"
 import { prismadb } from "@/lib/db"
 import { cn } from "@/lib/utils"
 
+import { ExtendedCharacter } from "@/types/custom"
+
 interface CharacterDetailsPageProps {
   params: {
     id: string
@@ -28,23 +30,18 @@ interface CharacterDetailsPageProps {
 const CharacterDetailsPage = async ({ params }: CharacterDetailsPageProps) => {
   const session = await getAuthSession()
 
-  const character = await prismadb.character.findUnique({
-    where: {
-      id: params.id,
-    },
-    include: {
-      anime: {
-        include: {
-          anime: true,
-        },
-      },
-      manga: {
-        include: {
-          manga: true,
-        },
-      },
+  const res = await fetch(`${process.env.API_URL}/character/${params.id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
   })
+
+  if (!res.ok) {
+    notFound()
+  }
+
+  const character: ExtendedCharacter = await res.json()
 
   if (!character) {
     notFound()

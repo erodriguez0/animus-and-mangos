@@ -20,15 +20,12 @@ interface UserProfilePageProps {
 const UserProfilePage = async ({ params }: UserProfilePageProps) => {
   const session = await getAuthSession()
 
-  const res = await fetch(
-    `${process.env.API_URL}/api/user/${params.username}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const res = await fetch(`${process.env.API_URL}/user/${params.username}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
-  )
+  })
 
   if (!res) {
     notFound()
@@ -45,7 +42,7 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
       )}
 
       <div className="flex flex-col gap-2 px-4 lg:px-0">
-        <h3 className="text-xl font-semibold tracking-tight">Anime</h3>
+        <p className="text-xl font-semibold tracking-tight">Anime</p>
         <div className="border-t" />
       </div>
 
@@ -96,7 +93,7 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
       </div>
 
       <div className="flex flex-col gap-2 px-4 lg:px-0">
-        <h3 className="text-xl font-semibold tracking-tight">Manga</h3>
+        <p className="text-xl font-semibold tracking-tight">Manga</p>
         <div className="border-t" />
       </div>
 
@@ -138,6 +135,8 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
                 <ScrollList
                   items={list.manga.map(item => item.manga)}
                   type="manga"
+                  size="sm"
+                  limit={10}
                 />
               )}
             </div>

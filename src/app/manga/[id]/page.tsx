@@ -8,9 +8,13 @@ import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
+import UserListsModal from "@/components/modals/user-lists-modal"
+
 import { getAuthSession } from "@/lib/auth"
 import { prismadb } from "@/lib/db"
 import { cn } from "@/lib/utils"
+
+import { ExtendedManga } from "@/types/custom"
 
 interface MangaDetailsPageProps {
   params: {
@@ -21,18 +25,18 @@ interface MangaDetailsPageProps {
 const MangaDetailsPage = async ({ params }: MangaDetailsPageProps) => {
   const session = await getAuthSession()
 
-  const manga = await prismadb.manga.findUnique({
-    where: {
-      id: params.id,
-    },
-    include: {
-      characters: {
-        include: {
-          character: true,
-        },
-      },
+  const res = await fetch(`${process.env.API_URL}/manga/${params.id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
   })
+
+  if (!res.ok) {
+    notFound()
+  }
+
+  const manga: ExtendedManga = await res.json()
 
   if (!manga) {
     notFound()
@@ -62,7 +66,10 @@ const MangaDetailsPage = async ({ params }: MangaDetailsPageProps) => {
 
       {session && (
         <div className="flex w-full gap-4 rounded-md border-y p-4 lg:border-x">
-          <Button className="w-fit">Add To List</Button>
+          <UserListsModal
+            id={params.id}
+            mode="manga"
+          />
 
           {session?.user.role === UserRole.ADMIN && (
             <Link

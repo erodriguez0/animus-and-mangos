@@ -24,7 +24,7 @@ const DashboardCharacterFormPage = async ({
     )
   }
 
-  const res = await fetch(`${process.env.API_URL}/api/character/${params.id}`, {
+  const res = await fetch(`${process.env.API_URL}/character/${params.id}`, {
     method: "GET",
   })
 

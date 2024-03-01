@@ -2,7 +2,7 @@ import { UserRole } from "@prisma/client"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import CharacterScrollList from "@/components/ui/character-list"
 import Poster from "@/components/ui/poster"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -11,8 +11,9 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import UserListsModal from "@/components/modals/user-lists-modal"
 
 import { getAuthSession } from "@/lib/auth"
-import { prismadb } from "@/lib/db"
 import { cn } from "@/lib/utils"
+
+import { ExtendedAnime } from "@/types/custom"
 
 interface AnimeDetailsPageProps {
   params: {
@@ -23,18 +24,18 @@ interface AnimeDetailsPageProps {
 const AnimeDetailsPage = async ({ params }: AnimeDetailsPageProps) => {
   const session = await getAuthSession()
 
-  const anime = await prismadb.anime.findUnique({
-    where: {
-      id: params.id,
-    },
-    include: {
-      characters: {
-        include: {
-          character: true,
-        },
-      },
+  const res = await fetch(`${process.env.API_URL}/anime/${params.id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
   })
+
+  if (!res.ok) {
+    notFound()
+  }
+
+  const anime: ExtendedAnime = await res.json()
 
   if (!anime) {
     notFound()

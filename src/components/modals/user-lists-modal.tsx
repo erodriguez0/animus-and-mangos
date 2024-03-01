@@ -5,6 +5,7 @@ import {
   AnimeList,
   CharacterList,
   ListAnime,
+  ListManga,
   MangaList,
 } from "@prisma/client"
 import { useSession } from "next-auth/react"
@@ -81,20 +82,32 @@ const UserListsModal = ({ mode, id }: UserListsModalProps) => {
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          {lists.map(list => (
-            <div
-              key={list.id}
-              className="flex items-center justify-between"
-            >
-              <p className="text-sm font-medium">{list.name}</p>
-              <AddToListToggle
-                id={id}
-                listId={list.id}
-                mode={mode}
-                exists={list.anime.map(a => a.anime_id).includes(id)}
-              />
-            </div>
-          ))}
+          {lists?.map(list => {
+            let exists: boolean = false
+
+            if (mode === "anime") {
+              exists = list.anime.map(a => a.anime_id).includes(id)
+            }
+
+            // if (mode === "manga") {
+            //   exists = list.manga.map(m => m.manga_id).includes(id)
+            // }
+
+            return (
+              <div
+                key={list.id}
+                className="flex items-center justify-between"
+              >
+                <p className="text-sm font-medium">{list.name}</p>
+                <AddToListToggle
+                  id={id}
+                  listId={list.id}
+                  mode={mode}
+                  exists={mode === "anime"}
+                />
+              </div>
+            )
+          })}
         </div>
       </DialogContent>
     </Dialog>

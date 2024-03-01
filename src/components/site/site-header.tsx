@@ -58,6 +58,7 @@ const SiteHeader = async () => {
                   )}
                 >
                   <LayoutDashboardIcon className="h-4 w-4" />
+                  <span className="sr-only">Dashboard</span>
                 </Link>
               )}
 
@@ -89,6 +90,7 @@ const SiteHeader = async () => {
                 )}
               >
                 <UserIcon className="h-4 w-4" />
+                <span className="sr-only">Profile</span>
               </Link>
 
               <ThemeToggle />

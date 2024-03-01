@@ -25,8 +25,10 @@ const LogoutButton = () => {
       <Button
         size="icon"
         variant="outline"
+        aria-label="Logout"
       >
         <LogOutIcon className="h-4 w-4" />
+        <span className="sr-only">Logout</span>
       </Button>
     )
   }
@@ -36,8 +38,10 @@ const LogoutButton = () => {
       size="icon"
       variant="outline"
       onClick={onClick}
+      aria-label="Logout"
     >
       <LogOutIcon className="h-4 w-4" />
+      <span className="sr-only">Logout</span>
     </Button>
   )
 }

@@ -24,7 +24,7 @@ const DashboardMangaFormPage = async ({
     )
   }
 
-  const res = await fetch(`${process.env.API_URL}/api/manga/${params.id}`, {
+  const res = await fetch(`${process.env.API_URL}/manga/${params.id}`, {
     method: "GET",
   })
 

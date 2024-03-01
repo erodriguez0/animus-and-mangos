@@ -25,8 +25,10 @@ const ThemeToggle = () => {
         size="icon"
         variant="outline"
         className="shrink-0"
+        aria-label="Toggle theme"
       >
         <SunIcon className="h-4 w-4" />
+        <span className="sr-only">Theme</span>
       </Button>
     )
 
@@ -35,6 +37,7 @@ const ThemeToggle = () => {
       size="icon"
       variant="outline"
       onClick={toggle}
+      aria-label="Togglet theme"
       className="shrink-0"
     >
       {theme === "dark" ? (
@@ -42,6 +45,7 @@ const ThemeToggle = () => {
       ) : (
         <SunIcon className="h-4 w-4" />
       )}
+      <span className="sr-only">Theme</span>
     </Button>
   )
 }

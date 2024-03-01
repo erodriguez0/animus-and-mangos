@@ -26,12 +26,9 @@ const UserProfileLayout = async ({
   children,
   params,
 }: UserProfileLayoutProps) => {
-  const res = await fetch(
-    `${process.env.API_URL}/api/user/${params.username}`,
-    {
-      cache: "no-store",
-    },
-  )
+  const res = await fetch(`${process.env.API_URL}/user/${params.username}`, {
+    cache: "no-store",
+  })
 
   if (!res.ok) {
     notFound()
@@ -65,7 +62,7 @@ const UserProfileLayout = async ({
                 <div
                   className={cn(
                     "w-fit rounded-md px-2 py-0.5 text-xs text-white",
-                    user.role === UserRole.ADMIN && "bg-red-500",
+                    user.role === UserRole.ADMIN && "bg-red-600",
                     user.role === UserRole.MOD && "bg-green-600",
                     user.role === UserRole.OWNER && "bg-amber-500",
                   )}
