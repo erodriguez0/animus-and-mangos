@@ -263,8 +263,9 @@ model ListCharacter {
 }
 
 model AnimeRating {
-  id    String @id @default(cuid()) @map("_id")
-  score Int
+  id     String  @id @default(cuid()) @map("_id")
+  score  Int
+  review String?
 
   user_id String
   user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -274,8 +275,9 @@ model AnimeRating {
 }
 
 model MangaRating {
-  id    String @id @default(cuid()) @map("_id")
-  score Int
+  id     String  @id @default(cuid()) @map("_id")
+  score  Int
+  review String?
 
   user_id String
   user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)

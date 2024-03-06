@@ -1,14 +1,18 @@
 import { UserRole } from "@prisma/client"
 import { format } from "date-fns"
+import { SettingsIcon } from "lucide-react"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ReactNode } from "react"
 
 import Avatar from "@/components/ui/avatar"
+import { buttonVariants } from "@/components/ui/button"
 import Sidebar from "@/components/ui/sidebar"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 import SiteHeader from "@/components/site/site-header"
 
+import { getAuthSession } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
 import { ExtendedUser } from "@/types/custom"
@@ -26,6 +30,8 @@ const UserProfileLayout = async ({
   children,
   params,
 }: UserProfileLayoutProps) => {
+  const session = await getAuthSession()
+
   const res = await fetch(`${process.env.API_URL}/user/${params.username}`, {
     cache: "no-store",
   })
@@ -69,6 +75,21 @@ const UserProfileLayout = async ({
                 >
                   {user.role}
                 </div>
+              )}
+            </div>
+
+            <div className="px-4 lg:px-0">
+              {session?.user.username === params.username && (
+                <Link
+                  href={`/u/${params.username}/settings`}
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "w-full gap-2 lg:justify-start",
+                  )}
+                >
+                  <SettingsIcon className="h-4 w-4" />
+                  Settings
+                </Link>
               )}
             </div>
 
