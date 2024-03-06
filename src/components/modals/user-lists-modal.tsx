@@ -32,8 +32,11 @@ interface UserListsModalProps {
 const UserListsModal = ({ mode, id }: UserListsModalProps) => {
   const { data: session } = useSession()
   const [open, setOpen] = useState<boolean>(false)
-  const [lists, setLists] = useState<
+  const [animeLists, setAnimeLists] = useState<
     Array<AnimeList & { anime: Array<ListAnime> }>
+  >([])
+  const [mangaLists, setMangaLists] = useState<
+    Array<MangaList & { manga: Array<ListManga> }>
   >([])
 
   const getLists = async () => {
@@ -53,7 +56,13 @@ const UserListsModal = ({ mode, id }: UserListsModalProps) => {
 
       const data = await res.json()
 
-      setLists(data)
+      if (mode === "anime") {
+        setAnimeLists(data)
+      }
+
+      if (mode === "manga") {
+        setMangaLists(data)
+      }
     } catch (error) {}
   }
 
@@ -82,17 +91,7 @@ const UserListsModal = ({ mode, id }: UserListsModalProps) => {
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          {lists?.map(list => {
-            let exists: boolean = false
-
-            if (mode === "anime") {
-              exists = list.anime.map(a => a.anime_id).includes(id)
-            }
-
-            // if (mode === "manga") {
-            //   exists = list.manga.map(m => m.manga_id).includes(id)
-            // }
-
+          {animeLists?.map(list => {
             return (
               <div
                 key={list.id}
@@ -103,7 +102,24 @@ const UserListsModal = ({ mode, id }: UserListsModalProps) => {
                   id={id}
                   listId={list.id}
                   mode={mode}
-                  exists={mode === "anime"}
+                  exists={list?.anime?.map(a => a.anime_id).includes(id)}
+                />
+              </div>
+            )
+          })}
+
+          {mangaLists?.map(list => {
+            return (
+              <div
+                key={list.id}
+                className="flex items-center justify-between"
+              >
+                <p className="text-sm font-medium">{list.name}</p>
+                <AddToListToggle
+                  id={id}
+                  listId={list.id}
+                  mode={mode}
+                  exists={list?.manga?.map(m => m.manga_id).includes(id)}
                 />
               </div>
             )
