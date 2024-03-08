@@ -35,7 +35,7 @@ const UserSettingsPage = async ({ params }: UserSettingsPageProps) => {
         <h1 className="text-3xl font-bold tracking-tighter">Settings</h1>
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 px-4 lg:px-0">
         <AvatarForm />
 
         <UsernameForm user={session.user} />
