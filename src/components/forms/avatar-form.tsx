@@ -50,6 +50,7 @@ const AvatarForm = () => {
           label="Avatar"
           disabled={form.formState.isSubmitting}
           showError
+          aspect="square"
           className="lg:w-fit"
         />
 

@@ -18,6 +18,7 @@ interface FormImageUploadProps<T extends FieldValues> {
   disabled?: boolean
   className?: string
   showError?: boolean
+  aspect?: "square" | "anime" | "manga"
 }
 
 const FormImageUpload = <T extends FieldValues>({
@@ -27,6 +28,7 @@ const FormImageUpload = <T extends FieldValues>({
   disabled,
   className,
   showError,
+  aspect = "anime",
 }: FormImageUploadProps<T>) => {
   return (
     <FormField
@@ -42,6 +44,7 @@ const FormImageUpload = <T extends FieldValues>({
               onChange={url => field.onChange(url)}
               onRemove={() => field.onChange("")}
               className={cn(className)}
+              aspectRatio={aspect}
             />
           </FormControl>
           {showError && <FormMessage />}
