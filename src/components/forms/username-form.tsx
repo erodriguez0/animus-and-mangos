@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { User } from "next-auth"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,8 @@ interface UsernameFormProps {
 }
 
 const UsernameForm = ({ user }: UsernameFormProps) => {
+  const router = useRouter()
+
   const form = useForm<UsernameType>({
     resolver: zodResolver(UsernameSchema),
     defaultValues: {
@@ -24,6 +27,19 @@ const UsernameForm = ({ user }: UsernameFormProps) => {
 
   const onSubmit = async (values: UsernameType) => {
     try {
+      const res = await fetch(`/api/settings/username`, {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!res.ok) {
+      }
+
+      router.replace(`/u/${form.getValues("username")}/settings`)
+      router.refresh()
     } catch (error) {}
   }
 

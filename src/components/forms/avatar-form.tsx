@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,8 @@ import FormImageUpload from "@/components/ui/form-image-upload"
 import { AvatarSchema, AvatarType } from "@/lib/validators/avatar"
 
 const AvatarForm = () => {
+  const router = useRouter()
+
   const form = useForm<AvatarType>({
     resolver: zodResolver(AvatarSchema),
     defaultValues: {
@@ -19,6 +22,19 @@ const AvatarForm = () => {
 
   const onSubmit = async (values: AvatarType) => {
     try {
+      const res = await fetch(`/api/settings/avatar`, {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!res.ok) {
+      }
+
+      router.refresh()
+      form.setValue("avatar", "")
     } catch (error) {}
   }
 
