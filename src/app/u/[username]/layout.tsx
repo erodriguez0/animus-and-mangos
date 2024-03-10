@@ -1,6 +1,6 @@
 import { UserRole } from "@prisma/client"
 import { format } from "date-fns"
-import { SettingsIcon } from "lucide-react"
+import { SettingsIcon, UserIcon } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ReactNode } from "react"
@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils"
 import { ExtendedUser } from "@/types/custom"
 
 export const revalidate = 0
+export const dynamic = "force-dynamic"
+export const fetchCache = "force-no-store"
 
 interface UserProfileLayoutProps {
   children: ReactNode
@@ -78,7 +80,18 @@ const UserProfileLayout = async ({
               )}
             </div>
 
-            <div className="px-4 lg:px-0">
+            <div className="flex flex-col gap-2 px-4 lg:px-0">
+              <Link
+                href={`/u/${params.username}`}
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "w-full gap-2 lg:justify-start",
+                )}
+              >
+                <UserIcon className="h-4 w-4" />
+                Profile
+              </Link>
+
               {session?.user.username === params.username && (
                 <Link
                   href={`/u/${params.username}/settings`}

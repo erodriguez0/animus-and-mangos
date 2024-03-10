@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 
     return Response.json(listManga)
   } catch (error) {
-    console.log("[LIST_ANIME_POST]\n", error)
+    console.log("[LIST_MANGA_POST]\n", error)
 
     return Response.json({ message: "Internal server error" }, { status: 500 })
   }
